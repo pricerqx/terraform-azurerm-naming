@@ -27,7 +27,8 @@ output "app_service" {
 }
 
 output "app_service_environment" {
-  value = local.az.app_service_environment
+  value       = local.az.app_service_environment
+  description = "App Service Environment"
 }
 
 output "app_service_plan" {
@@ -158,6 +159,16 @@ output "cdn_profile" {
 output "cognitive_account" {
   value       = local.az.cognitive_account
   description = "Cognitive Account"
+}
+
+output "container_app" {
+  value       = local.az.container_app
+  description = "Container App"
+}
+
+output "container_app_environment" {
+  value       = local.az.container_app_environment
+  description = "Container App Environment"
 }
 
 output "container_group" {

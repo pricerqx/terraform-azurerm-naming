@@ -11,14 +11,14 @@ resource "random_string" "main" {
   length  = 60
   special = false
   upper   = false
-  numeric = var.unique-include-numbers
+  numeric  = var.unique-include-numbers
 }
 
 resource "random_string" "first_letter" {
   length  = 1
   special = false
   upper   = false
-  numeric = false
+  numeric  = false
 }
 
 
@@ -77,14 +77,14 @@ locals {
       regex       = "^[a-z0-9][a-zA-Z0-9-]+[a-z0-9]"
     }
     app_service_environment = {
-      name        = substr(join("-", compact([local.prefix, "ase", local.suffix])), 0, 60)
-      name_unique = substr(join("-", compact([local.prefix, "ase", local.suffix_unique])), 0, 60)
+      name        = substr(join("-", compact([local.prefix, "ase", local.suffix])), 0, 40)
+      name_unique = substr(join("-", compact([local.prefix, "ase", local.suffix_unique])), 0, 40)
       dashes      = true
       slug        = "ase"
-      min_length  = 2
-      max_length  = 60
-      scope       = "resouceGroup"
-      regex       = "^[a-z0-9][a-zA-Z0-9-]+[a-z0-9]"
+      min_length  = 1
+      max_length  = 40
+      scope       = "resourceGroup"
+      regex       = "^[a-zA-Z0-9-]+$"
     }
     app_service_plan = {
       name        = substr(join("-", compact([local.prefix, "plan", local.suffix])), 0, 40)
@@ -343,6 +343,26 @@ locals {
       slug        = "cog"
       min_length  = 2
       max_length  = 64
+      scope       = "resourceGroup"
+      regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+$"
+    }
+    container_app = {
+      name        = substr(join("-", compact([local.prefix, "ca", local.suffix])), 0, 32)
+      name_unique = substr(join("-", compact([local.prefix, "ca", local.suffix_unique])), 0, 32)
+      dashes      = true
+      slug        = "ca"
+      min_length  = 2
+      max_length  = 32
+      scope       = "resourceGroup"
+      regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+$"
+    }
+    container_app_environment = {
+      name        = substr(join("-", compact([local.prefix, "cae", local.suffix])), 0, 32)
+      name_unique = substr(join("-", compact([local.prefix, "cae", local.suffix_unique])), 0, 32)
+      dashes      = true
+      slug        = "cae"
+      min_length  = 2
+      max_length  = 32
       scope       = "resourceGroup"
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+$"
     }
@@ -2414,6 +2434,10 @@ locals {
       valid_name        = length(regexall(local.az.app_service.regex, local.az.app_service.name)) > 0 && length(local.az.app_service.name) > local.az.app_service.min_length
       valid_name_unique = length(regexall(local.az.app_service.regex, local.az.app_service.name_unique)) > 0
     }
+    app_service_environment = {
+      valid_name        = length(regexall(local.az.app_service_environment.regex, local.az.app_service_environment.name)) > 0 && length(local.az.app_service_environment.name) > local.az.app_service_environment.min_length
+      valid_name_unique = length(regexall(local.az.app_service_environment.regex, local.az.app_service_environment.name_unique)) > 0
+    }
     app_service_plan = {
       valid_name        = length(regexall(local.az.app_service_plan.regex, local.az.app_service_plan.name)) > 0 && length(local.az.app_service_plan.name) > local.az.app_service_plan.min_length
       valid_name_unique = length(regexall(local.az.app_service_plan.regex, local.az.app_service_plan.name_unique)) > 0
@@ -2517,6 +2541,14 @@ locals {
     cognitive_account = {
       valid_name        = length(regexall(local.az.cognitive_account.regex, local.az.cognitive_account.name)) > 0 && length(local.az.cognitive_account.name) > local.az.cognitive_account.min_length
       valid_name_unique = length(regexall(local.az.cognitive_account.regex, local.az.cognitive_account.name_unique)) > 0
+    }
+    container_app = {
+      valid_name        = length(regexall(local.az.container_app.regex, local.az.container_app.name)) > 0 && length(local.az.container_app.name) > local.az.container_app.min_length
+      valid_name_unique = length(regexall(local.az.container_app.regex, local.az.container_app.name_unique)) > 0
+    }
+    container_app_environment = {
+      valid_name        = length(regexall(local.az.container_app_environment.regex, local.az.container_app_environment.name)) > 0 && length(local.az.container_app_environment.name) > local.az.container_app_environment.min_length
+      valid_name_unique = length(regexall(local.az.container_app_environment.regex, local.az.container_app_environment.name_unique)) > 0
     }
     container_group = {
       valid_name        = length(regexall(local.az.container_group.regex, local.az.container_group.name)) > 0 && length(local.az.container_group.name) > local.az.container_group.min_length

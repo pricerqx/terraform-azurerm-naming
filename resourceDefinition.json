@@ -335,10 +335,34 @@
       "min": 2,
       "max": 64
     },
-    "regex": "^(?=.{1,260}$)[a-zA-Z0-9][a-zA-Z0-9-]+$",
+    "regex": "^(?=.{1,64}$)[a-zA-Z0-9][a-zA-Z0-9-]+$",
     "scope": "resourceGroup",
     "slug": "cog",
     "dashes": true
+  },
+  {
+    "name": "container_app",
+    "length": {
+      "min": 2,
+      "max": 32
+    },
+    "regex": "^(?=.{1,32}$)[a-zA-Z0-9][a-zA-Z0-9-]+$",
+    "scope": "resourceGroup",
+    "slug": "ca",
+    "dashes": true
+
+  },
+  {
+    "name": "container_app_environment",
+    "length": {
+      "min": 2,
+      "max": 32
+    },
+    "regex": "^(?=.{1,32}$)[a-zA-Z0-9][a-zA-Z0-9-]+$",
+    "scope": "resourceGroup",
+    "slug": "cae",
+    "dashes": true
+
   },
   {
     "name": "container_group",
