@@ -6,6 +6,14 @@ output "unique-seed" {
 output "validation" {
   value = local.validation
 }
+
+output "prefix_safe" {
+  value = local.prefix_safe
+}
+
+output "suffix_safe" {
+  value = local.suffix_safe
+}
 output "analysis_services_server" {
   value       = local.az.analysis_services_server
   description = "Analysis Services Server"
