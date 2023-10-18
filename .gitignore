@@ -2,3 +2,5 @@
 *.tfstate*
 terraform-azurerm-naming
 .terraform.lock.hcl
+go.mod
+go.sum
