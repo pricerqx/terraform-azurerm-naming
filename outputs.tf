@@ -14,6 +14,9 @@ output "prefix_safe" {
 output "suffix_safe" {
   value = local.suffix_safe
 }
+output "suffix" {
+  value = local.suffix
+}
 output "analysis_services_server" {
   value       = local.az.analysis_services_server
   description = "Analysis Services Server"

@@ -55,10 +55,10 @@ locals {
       regex       = "^[a-z][a-zA-Z0-9]+$"
     }
     app_configuration = {
-      name        = substr(join("-", compact([local.prefix, "appcg", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "appcg", local.suffix_unique])), 0, 50)
+      name        = substr(join("-", compact([local.prefix, "appcs", local.suffix])), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, "appcs", local.suffix_unique])), 0, 50)
       dashes      = true
-      slug        = "appcg"
+      slug        = "appcs"
       min_length  = 5
       max_length  = 50
       scope       = "resourceGroup"
@@ -2295,10 +2295,10 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-.]+[a-zA-Z0-9_]$"
     }
     user_assigned_identity = {
-      name        = substr(join("-", compact([local.prefix, "uai", local.suffix])), 0, 128)
-      name_unique = substr(join("-", compact([local.prefix, "uai", local.suffix_unique])), 0, 128)
+      name        = substr(join("-", compact([local.prefix, "id", local.suffix])), 0, 128)
+      name_unique = substr(join("-", compact([local.prefix, "id", local.suffix_unique])), 0, 128)
       dashes      = true
-      slug        = "uai"
+      slug        = "id"
       min_length  = 3
       max_length  = 128
       scope       = "resourceGroup"
