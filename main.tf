@@ -11,15 +11,17 @@ resource "random_string" "main" {
   length  = 60
   special = false
   upper   = false
-  numeric = var.unique-include-numbers
+  numeric  = var.unique-include-numbers
 }
 
 resource "random_string" "first_letter" {
   length  = 1
   special = false
   upper   = false
-  numeric = false
+  numeric  = false
 }
+
+
 
 locals {
   // adding a first letter to guarantee that you always start with a letter
@@ -193,6 +195,16 @@ locals {
       max_length  = 80
       scope       = "resourceGroup"
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-_.]+[a-zA-Z0-9_]$"
+    }
+    b2c_tenant = {
+      name        = substr(join("", compact([local.prefix_safe, "b2c", local.suffix_safe])), 0, 24)
+      name_unique = substr(join("", compact([local.prefix_safe, "b2c", local.suffix_unique_safe])), 0, 24)
+      dashes      = false
+      slug        = "b2c"
+      min_length  = 3
+      max_length  = 24
+      scope       = "parent"
+      regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     bastion_host = {
       name        = substr(join("-", compact([local.prefix, "snap", local.suffix])), 0, 80)
@@ -2479,6 +2491,10 @@ locals {
     availability_set = {
       valid_name        = length(regexall(local.az.availability_set.regex, local.az.availability_set.name)) > 0 && length(local.az.availability_set.name) > local.az.availability_set.min_length
       valid_name_unique = length(regexall(local.az.availability_set.regex, local.az.availability_set.name_unique)) > 0
+    }
+    b2c_tenant = {
+      valid_name        = length(regexall(local.az.b2c_tenant.regex, local.az.b2c_tenant.name)) > 0 && length(local.az.b2c_tenant.name) > local.az.b2c_tenant.min_length
+      valid_name_unique = length(regexall(local.az.b2c_tenant.regex, local.az.b2c_tenant.name_unique)) > 0
     }
     bastion_host = {
       valid_name        = length(regexall(local.az.bastion_host.regex, local.az.bastion_host.name)) > 0 && length(local.az.bastion_host.name) > local.az.bastion_host.min_length

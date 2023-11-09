@@ -14,6 +14,18 @@ output "validation" {
   value = local.validation
 }
 
+output "prefix_safe" {
+  value = local.prefix_safe
+}
+
+output "suffix_safe" {
+  value = local.suffix_safe
+}
+output "suffix" {
+  value = local.suffix
+}
+
+
 {{- range . }}
     {{- template  "output" .}}
 {{- end }}

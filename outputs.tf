@@ -97,6 +97,11 @@ output "availability_set" {
   description = "Availability Set"
 }
 
+output "b2c_tenant" {
+  value       = local.az.b2c_tenant
+  description = "B2c Tenant"
+}
+
 output "bastion_host" {
   value       = local.az.bastion_host
   description = "Bastion Host"
