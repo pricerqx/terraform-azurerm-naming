@@ -1026,6 +1026,46 @@ locals {
       scope       = "global"
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
+    frontdoor_origin = {
+      name        = substr(join("-", compact([local.prefix, "fdo", local.suffix])), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, "fdo", local.suffix_unique])), 0, 50)
+      dashes      = true
+      slug        = "fdo"
+      min_length  = 1
+      max_length  = 50
+      scope       = "parent"
+      regex       = "^[a-z][a-zA-Z0-9-]+$"
+    }
+    frontdoor_origin_group = {
+      name        = substr(join("-", compact([local.prefix, "fdog", local.suffix])), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, "fdog", local.suffix_unique])), 0, 50)
+      dashes      = true
+      slug        = "fdog"
+      min_length  = 1
+      max_length  = 50
+      scope       = "parent"
+      regex       = "^[a-z][a-zA-Z0-9-]+$"
+    }
+    frontdoor_ruleset = {
+      name        = substr(join("", compact([local.prefix_safe, "fdrs", local.suffix_safe])), 0, 50)
+      name_unique = substr(join("", compact([local.prefix_safe, "fdrs", local.suffix_unique_safe])), 0, 50)
+      dashes      = false
+      slug        = "fdrs"
+      min_length  = 1
+      max_length  = 50
+      scope       = "parent"
+      regex       = "^[a-z][a-zA-Z0-9]+$"
+    }
+    frontdoor_security_policy = {
+      name        = substr(join("", compact([local.prefix_safe, "fdsp", local.suffix_safe])), 0, 50)
+      name_unique = substr(join("", compact([local.prefix_safe, "fdsp", local.suffix_unique_safe])), 0, 50)
+      dashes      = false
+      slug        = "fdsp"
+      min_length  = 1
+      max_length  = 50
+      scope       = "parent"
+      regex       = "^[a-z][a-zA-Z0-9]+$"
+    }
     function_app = {
       name        = substr(join("-", compact([local.prefix, "func", local.suffix])), 0, 60)
       name_unique = substr(join("-", compact([local.prefix, "func", local.suffix_unique])), 0, 60)
@@ -2823,6 +2863,22 @@ locals {
     frontdoor_firewall_policy = {
       valid_name        = length(regexall(local.az.frontdoor_firewall_policy.regex, local.az.frontdoor_firewall_policy.name)) > 0 && length(local.az.frontdoor_firewall_policy.name) > local.az.frontdoor_firewall_policy.min_length
       valid_name_unique = length(regexall(local.az.frontdoor_firewall_policy.regex, local.az.frontdoor_firewall_policy.name_unique)) > 0
+    }
+    frontdoor_origin = {
+      valid_name        = length(regexall(local.az.frontdoor_origin.regex, local.az.frontdoor_origin.name)) > 0 && length(local.az.frontdoor_origin.name) > local.az.frontdoor_origin.min_length
+      valid_name_unique = length(regexall(local.az.frontdoor_origin.regex, local.az.frontdoor_origin.name_unique)) > 0
+    }
+    frontdoor_origin_group = {
+      valid_name        = length(regexall(local.az.frontdoor_origin_group.regex, local.az.frontdoor_origin_group.name)) > 0 && length(local.az.frontdoor_origin_group.name) > local.az.frontdoor_origin_group.min_length
+      valid_name_unique = length(regexall(local.az.frontdoor_origin_group.regex, local.az.frontdoor_origin_group.name_unique)) > 0
+    }
+    frontdoor_ruleset = {
+      valid_name        = length(regexall(local.az.frontdoor_ruleset.regex, local.az.frontdoor_ruleset.name)) > 0 && length(local.az.frontdoor_ruleset.name) > local.az.frontdoor_ruleset.min_length
+      valid_name_unique = length(regexall(local.az.frontdoor_ruleset.regex, local.az.frontdoor_ruleset.name_unique)) > 0
+    }
+    frontdoor_security_policy = {
+      valid_name        = length(regexall(local.az.frontdoor_security_policy.regex, local.az.frontdoor_security_policy.name)) > 0 && length(local.az.frontdoor_security_policy.name) > local.az.frontdoor_security_policy.min_length
+      valid_name_unique = length(regexall(local.az.frontdoor_security_policy.regex, local.az.frontdoor_security_policy.name_unique)) > 0
     }
     function_app = {
       valid_name        = length(regexall(local.az.function_app.regex, local.az.function_app.name)) > 0 && length(local.az.function_app.name) > local.az.function_app.min_length

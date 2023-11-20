@@ -361,7 +361,6 @@
     "scope": "resourceGroup",
     "slug": "ca",
     "dashes": true
-
   },
   {
     "name": "container_app_environment",
@@ -373,7 +372,6 @@
     "scope": "resourceGroup",
     "slug": "cae",
     "dashes": true
-
   },
   {
     "name": "container_group",
@@ -891,6 +889,61 @@
     "scope": "global",
     "slug": "fdfw",
     "dashes": true
+  },
+  {
+    "name": "frontdoor_origin_group",
+    "length": {
+      "min": 1,
+      "max": 50
+    },
+    "regex": "^(?=.{1,50}$)[a-z][a-zA-Z0-9-]+$",
+    "scope": "parent",
+    "slug": "fdog",
+    "dashes": true
+  },
+  {
+    "name": "frontdoor_origin",
+    "length": {
+      "min": 1,
+      "max": 50
+    },
+    "regex": "^(?=.{1,50}$)[a-z][a-zA-Z0-9-]+$",
+    "scope": "parent",
+    "slug": "fdo",
+    "dashes": true
+  },
+  {
+    "name": "frontdoor_custom_domain",
+    "length": {
+      "min": 1,
+      "max": 50
+    },
+    "regex": "^(?=.{1,50}$)[a-z][a-zA-Z0-9-]+$",
+    "scope": "parent",
+    "slug": "fdo",
+    "dashes": true
+  },
+  {
+    "name": "frontdoor_ruleset",
+    "length": {
+      "min": 1,
+      "max": 50
+    },
+    "regex": "^(?=.{1,50}$)[a-z][a-zA-Z0-9]+$",
+    "scope": "parent",
+    "slug": "fdrs",
+    "dashes": false
+  },
+  {
+    "name": "frontdoor_security_policy",
+    "length": {
+      "min": 1,
+      "max": 50
+    },
+    "regex": "^(?=.{1,50}$)[a-z][a-zA-Z0-9]+$",
+    "scope": "parent",
+    "slug": "fdsp",
+    "dashes": false
   },
   {
     "name": "function_app",

@@ -512,6 +512,26 @@ output "frontdoor_firewall_policy" {
   description = "Frontdoor Firewall Policy"
 }
 
+output "frontdoor_origin" {
+  value       = local.az.frontdoor_origin
+  description = "Frontdoor Origin"
+}
+
+output "frontdoor_origin_group" {
+  value       = local.az.frontdoor_origin_group
+  description = "Frontdoor Origin Group"
+}
+
+output "frontdoor_ruleset" {
+  value       = local.az.frontdoor_ruleset
+  description = "Frontdoor Ruleset"
+}
+
+output "frontdoor_security_policy" {
+  value       = local.az.frontdoor_security_policy
+  description = "Frontdoor Security Policy"
+}
+
 output "function_app" {
   value       = local.az.function_app
   description = "Function App"
