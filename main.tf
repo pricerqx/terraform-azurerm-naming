@@ -1016,6 +1016,16 @@ locals {
       scope       = "global"
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
+    frontdoor_custom_domain = {
+      name        = substr(join("-", compact([local.prefix, "fdcd", local.suffix])), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, "fdcd", local.suffix_unique])), 0, 50)
+      dashes      = true
+      slug        = "fdcd"
+      min_length  = 1
+      max_length  = 50
+      scope       = "parent"
+      regex       = "^[a-z][a-zA-Z0-9-]+$"
+    }
     frontdoor_firewall_policy = {
       name        = substr(join("-", compact([local.prefix, "fdfw", local.suffix])), 0, 80)
       name_unique = substr(join("-", compact([local.prefix, "fdfw", local.suffix_unique])), 0, 80)
@@ -2859,6 +2869,10 @@ locals {
     frontdoor = {
       valid_name        = length(regexall(local.az.frontdoor.regex, local.az.frontdoor.name)) > 0 && length(local.az.frontdoor.name) > local.az.frontdoor.min_length
       valid_name_unique = length(regexall(local.az.frontdoor.regex, local.az.frontdoor.name_unique)) > 0
+    }
+    frontdoor_custom_domain = {
+      valid_name        = length(regexall(local.az.frontdoor_custom_domain.regex, local.az.frontdoor_custom_domain.name)) > 0 && length(local.az.frontdoor_custom_domain.name) > local.az.frontdoor_custom_domain.min_length
+      valid_name_unique = length(regexall(local.az.frontdoor_custom_domain.regex, local.az.frontdoor_custom_domain.name_unique)) > 0
     }
     frontdoor_firewall_policy = {
       valid_name        = length(regexall(local.az.frontdoor_firewall_policy.regex, local.az.frontdoor_firewall_policy.name)) > 0 && length(local.az.frontdoor_firewall_policy.name) > local.az.frontdoor_firewall_policy.min_length

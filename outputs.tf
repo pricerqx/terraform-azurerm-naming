@@ -507,6 +507,11 @@ output "frontdoor" {
   description = "Frontdoor"
 }
 
+output "frontdoor_custom_domain" {
+  value       = local.az.frontdoor_custom_domain
+  description = "Frontdoor Custom Domain"
+}
+
 output "frontdoor_firewall_policy" {
   value       = local.az.frontdoor_firewall_policy
   description = "Frontdoor Firewall Policy"
