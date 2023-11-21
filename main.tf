@@ -1027,14 +1027,14 @@ locals {
       regex       = "^[a-z][a-zA-Z0-9-]+$"
     }
     frontdoor_firewall_policy = {
-      name        = substr(join("-", compact([local.prefix, "fdfw", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "fdfw", local.suffix_unique])), 0, 80)
-      dashes      = true
+      name        = substr(join("", compact([local.prefix_safe, "fdfw", local.suffix_safe])), 0, 128)
+      name_unique = substr(join("", compact([local.prefix_safe, "fdfw", local.suffix_unique_safe])), 0, 128)
+      dashes      = false
       slug        = "fdfw"
       min_length  = 1
-      max_length  = 80
+      max_length  = 128
       scope       = "global"
-      regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
+      regex       = "(^[a-zA-Z])([0-9a-zA-Z]{0,127})$"
     }
     frontdoor_origin = {
       name        = substr(join("-", compact([local.prefix, "fdo", local.suffix])), 0, 50)

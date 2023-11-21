@@ -883,12 +883,12 @@
     "name": "frontdoor_firewall_policy",
     "length": {
       "min": 1,
-      "max": 80
+      "max": 128
     },
-    "regex": "^(?=.{1,80}$)[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$",
+    "regex": "(^[a-zA-Z])([0-9a-zA-Z]{0,127})$",
     "scope": "global",
     "slug": "fdfw",
-    "dashes": true
+    "dashes": false
   },
   {
     "name": "frontdoor_origin_group",
