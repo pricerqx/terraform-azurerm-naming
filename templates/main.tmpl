@@ -1,7 +1,7 @@
 {{- define "resources" -}}
     {{- .Name }} = {
-      name        = substr(join("{{if .Dashes}}-{{ end }}", compact([local.prefix{{if not .Dashes}}_safe{{ end }}, "{{ .Slug }}", local.suffix{{if not .Dashes}}_safe{{ end }}])), 0, {{ .Length.Max }})
-      name_unique = substr(join("{{if .Dashes}}-{{ end }}", compact([local.prefix{{if not .Dashes}}_safe{{ end }}, "{{ .Slug }}", local.suffix_unique{{if not .Dashes}}_safe{{ end }}])), 0, {{ .Length.Max }})
+      name = substr(join("{{if .Dashes}}-{{ end }}", compact([local.prefix{{if not .Dashes}}_safe{{ end }}, lookup(local.overrides, "{{- .Name }}", { slug = "{{ .Slug }}", suffix = "" }).slug, local.suffix{{if not .Dashes}}_safe{{ end }}, lookup(local.overrides, "{{- .Name }}", { slug = "{{ .Slug }}", suffix = "" }).suffix]), ), 0, {{ .Length.Max }})
+      name_unique = substr(join("{{if .Dashes}}-{{ end }}", compact([local.prefix{{if not .Dashes}}_safe{{ end }}, lookup(local.overrides, "{{- .Name }}", { slug = "{{ .Slug }}", suffix = "" }).slug, local.suffix_unique{{if not .Dashes}}_safe{{ end }}, lookup(local.overrides, "{{- .Name }}", { slug = "{{ .Slug }}", suffix = "" }).suffix])), 0, {{ .Length.Max }})
       dashes      = {{ .Dashes }}
       slug        = "{{ .Slug }}"
       min_length  = {{ .Length.Min }}
@@ -17,8 +17,6 @@
       valid_name_unique = length(regexall(local.az.{{- .Name }}.regex, local.az.{{- .Name }}.name_unique)) > 0
     }
 {{- end -}}
-
-
 
 {{- define "main" -}}
 terraform {
@@ -56,6 +54,7 @@ locals {
   suffix_unique          = join("-", concat(var.suffix, [local.random]))
   suffix_safe            = lower(join("", var.suffix))
   suffix_unique_safe     = lower(join("", concat(var.suffix, [local.random])))
+  overrides              = var.name-slug-overrides
   // Names based in the recomendations of
   // https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/naming-and-tagging
   az = {
