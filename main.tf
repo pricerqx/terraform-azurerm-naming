@@ -33,12 +33,13 @@ locals {
   suffix_unique          = join("-", concat(var.suffix, [local.random]))
   suffix_safe            = lower(join("", var.suffix))
   suffix_unique_safe     = lower(join("", concat(var.suffix, [local.random])))
+  overrides              = var.name-slug-overrides
   // Names based in the recomendations of
   // https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/naming-and-tagging
   az = {
     analysis_services_server = {
-      name        = substr(join("", compact([local.prefix_safe, "as", local.suffix_safe])), 0, 63)
-      name_unique = substr(join("", compact([local.prefix_safe, "as", local.suffix_unique_safe])), 0, 63)
+      name = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "analysis_services_server", { slug = "as", suffix = "" }).slug, local.suffix_safe, lookup(local.overrides, "analysis_services_server", { slug = "as", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "analysis_services_server", { slug = "as", suffix = "" }).slug, local.suffix_unique_safe, lookup(local.overrides, "analysis_services_server", { slug = "as", suffix = "" }).suffix])), 0, 63)
       dashes      = false
       slug        = "as"
       min_length  = 3
@@ -47,8 +48,8 @@ locals {
       regex       = "^[a-z][a-z0-9]+$"
     }
     api_management = {
-      name        = substr(join("", compact([local.prefix_safe, "apim", local.suffix_safe])), 0, 50)
-      name_unique = substr(join("", compact([local.prefix_safe, "apim", local.suffix_unique_safe])), 0, 50)
+      name = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "api_management", { slug = "apim", suffix = "" }).slug, local.suffix_safe, lookup(local.overrides, "api_management", { slug = "apim", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "api_management", { slug = "apim", suffix = "" }).slug, local.suffix_unique_safe, lookup(local.overrides, "api_management", { slug = "apim", suffix = "" }).suffix])), 0, 50)
       dashes      = false
       slug        = "apim"
       min_length  = 1
@@ -57,8 +58,8 @@ locals {
       regex       = "^[a-z][a-zA-Z0-9]+$"
     }
     app_configuration = {
-      name        = substr(join("-", compact([local.prefix, "appcs", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "appcs", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "app_configuration", { slug = "appcs", suffix = "" }).slug, local.suffix, lookup(local.overrides, "app_configuration", { slug = "appcs", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "app_configuration", { slug = "appcs", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "app_configuration", { slug = "appcs", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "appcs"
       min_length  = 5
@@ -67,8 +68,8 @@ locals {
       regex       = "^[a-zA-Z0-9_-]+$"
     }
     app_service = {
-      name        = substr(join("-", compact([local.prefix, "app", local.suffix])), 0, 60)
-      name_unique = substr(join("-", compact([local.prefix, "app", local.suffix_unique])), 0, 60)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "app_service", { slug = "app", suffix = "" }).slug, local.suffix, lookup(local.overrides, "app_service", { slug = "app", suffix = "" }).suffix]), ), 0, 60)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "app_service", { slug = "app", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "app_service", { slug = "app", suffix = "" }).suffix])), 0, 60)
       dashes      = true
       slug        = "app"
       min_length  = 2
@@ -77,8 +78,8 @@ locals {
       regex       = "^[a-z0-9][a-zA-Z0-9-]+[a-z0-9]"
     }
     app_service_environment = {
-      name        = substr(join("-", compact([local.prefix, "ase", local.suffix])), 0, 40)
-      name_unique = substr(join("-", compact([local.prefix, "ase", local.suffix_unique])), 0, 40)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "app_service_environment", { slug = "ase", suffix = "" }).slug, local.suffix, lookup(local.overrides, "app_service_environment", { slug = "ase", suffix = "" }).suffix]), ), 0, 40)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "app_service_environment", { slug = "ase", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "app_service_environment", { slug = "ase", suffix = "" }).suffix])), 0, 40)
       dashes      = true
       slug        = "ase"
       min_length  = 1
@@ -87,8 +88,8 @@ locals {
       regex       = "^[a-zA-Z0-9-]+$"
     }
     app_service_plan = {
-      name        = substr(join("-", compact([local.prefix, "plan", local.suffix])), 0, 40)
-      name_unique = substr(join("-", compact([local.prefix, "plan", local.suffix_unique])), 0, 40)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "app_service_plan", { slug = "plan", suffix = "" }).slug, local.suffix, lookup(local.overrides, "app_service_plan", { slug = "plan", suffix = "" }).suffix]), ), 0, 40)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "app_service_plan", { slug = "plan", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "app_service_plan", { slug = "plan", suffix = "" }).suffix])), 0, 40)
       dashes      = true
       slug        = "plan"
       min_length  = 1
@@ -97,8 +98,8 @@ locals {
       regex       = "^[a-zA-Z0-9-]+$"
     }
     application_gateway = {
-      name        = substr(join("-", compact([local.prefix, "agw", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "agw", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "application_gateway", { slug = "agw", suffix = "" }).slug, local.suffix, lookup(local.overrides, "application_gateway", { slug = "agw", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "application_gateway", { slug = "agw", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "application_gateway", { slug = "agw", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "agw"
       min_length  = 1
@@ -107,8 +108,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     application_insights = {
-      name        = substr(join("-", compact([local.prefix, "appi", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "appi", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "application_insights", { slug = "appi", suffix = "" }).slug, local.suffix, lookup(local.overrides, "application_insights", { slug = "appi", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "application_insights", { slug = "appi", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "application_insights", { slug = "appi", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "appi"
       min_length  = 10
@@ -117,8 +118,8 @@ locals {
       regex       = "^[^%\\&?/]+$"
     }
     application_security_group = {
-      name        = substr(join("-", compact([local.prefix, "asg", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "asg", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "application_security_group", { slug = "asg", suffix = "" }).slug, local.suffix, lookup(local.overrides, "application_security_group", { slug = "asg", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "application_security_group", { slug = "asg", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "application_security_group", { slug = "asg", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "asg"
       min_length  = 1
@@ -127,8 +128,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     automation_account = {
-      name        = substr(join("-", compact([local.prefix, "aa", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "aa", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "automation_account", { slug = "aa", suffix = "" }).slug, local.suffix, lookup(local.overrides, "automation_account", { slug = "aa", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "automation_account", { slug = "aa", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "automation_account", { slug = "aa", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "aa"
       min_length  = 6
@@ -137,8 +138,8 @@ locals {
       regex       = "^[a-zA-Z][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     automation_certificate = {
-      name        = substr(join("-", compact([local.prefix, "aacert", local.suffix])), 0, 128)
-      name_unique = substr(join("-", compact([local.prefix, "aacert", local.suffix_unique])), 0, 128)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "automation_certificate", { slug = "aacert", suffix = "" }).slug, local.suffix, lookup(local.overrides, "automation_certificate", { slug = "aacert", suffix = "" }).suffix]), ), 0, 128)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "automation_certificate", { slug = "aacert", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "automation_certificate", { slug = "aacert", suffix = "" }).suffix])), 0, 128)
       dashes      = true
       slug        = "aacert"
       min_length  = 1
@@ -147,8 +148,8 @@ locals {
       regex       = "^[^<>*%:.?\\+\\/]+[^<>*%:.?\\+\\/ ]$"
     }
     automation_credential = {
-      name        = substr(join("-", compact([local.prefix, "aacred", local.suffix])), 0, 128)
-      name_unique = substr(join("-", compact([local.prefix, "aacred", local.suffix_unique])), 0, 128)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "automation_credential", { slug = "aacred", suffix = "" }).slug, local.suffix, lookup(local.overrides, "automation_credential", { slug = "aacred", suffix = "" }).suffix]), ), 0, 128)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "automation_credential", { slug = "aacred", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "automation_credential", { slug = "aacred", suffix = "" }).suffix])), 0, 128)
       dashes      = true
       slug        = "aacred"
       min_length  = 1
@@ -157,8 +158,8 @@ locals {
       regex       = "^[^<>*%:.?\\+\\/]+[^<>*%:.?\\+\\/ ]$"
     }
     automation_runbook = {
-      name        = substr(join("-", compact([local.prefix, "aacred", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "aacred", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "automation_runbook", { slug = "aacred", suffix = "" }).slug, local.suffix, lookup(local.overrides, "automation_runbook", { slug = "aacred", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "automation_runbook", { slug = "aacred", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "automation_runbook", { slug = "aacred", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "aacred"
       min_length  = 1
@@ -167,8 +168,8 @@ locals {
       regex       = "^[a-zA-Z][a-zA-Z0-9-]+$"
     }
     automation_schedule = {
-      name        = substr(join("-", compact([local.prefix, "aasched", local.suffix])), 0, 128)
-      name_unique = substr(join("-", compact([local.prefix, "aasched", local.suffix_unique])), 0, 128)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "automation_schedule", { slug = "aasched", suffix = "" }).slug, local.suffix, lookup(local.overrides, "automation_schedule", { slug = "aasched", suffix = "" }).suffix]), ), 0, 128)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "automation_schedule", { slug = "aasched", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "automation_schedule", { slug = "aasched", suffix = "" }).suffix])), 0, 128)
       dashes      = true
       slug        = "aasched"
       min_length  = 1
@@ -177,8 +178,8 @@ locals {
       regex       = "^[^<>*%:.?\\+\\/]+[^<>*%:.?\\+\\/ ]$"
     }
     automation_variable = {
-      name        = substr(join("-", compact([local.prefix, "aavar", local.suffix])), 0, 128)
-      name_unique = substr(join("-", compact([local.prefix, "aavar", local.suffix_unique])), 0, 128)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "automation_variable", { slug = "aavar", suffix = "" }).slug, local.suffix, lookup(local.overrides, "automation_variable", { slug = "aavar", suffix = "" }).suffix]), ), 0, 128)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "automation_variable", { slug = "aavar", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "automation_variable", { slug = "aavar", suffix = "" }).suffix])), 0, 128)
       dashes      = true
       slug        = "aavar"
       min_length  = 1
@@ -187,8 +188,8 @@ locals {
       regex       = "^[^<>*%:.?\\+\\/]+[^<>*%:.?\\+\\/ ]$"
     }
     availability_set = {
-      name        = substr(join("-", compact([local.prefix, "avail", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "avail", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "availability_set", { slug = "avail", suffix = "" }).slug, local.suffix, lookup(local.overrides, "availability_set", { slug = "avail", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "availability_set", { slug = "avail", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "availability_set", { slug = "avail", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "avail"
       min_length  = 1
@@ -197,8 +198,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-_.]+[a-zA-Z0-9_]$"
     }
     b2c_tenant = {
-      name        = substr(join("", compact([local.prefix_safe, "b2c", local.suffix_safe])), 0, 24)
-      name_unique = substr(join("", compact([local.prefix_safe, "b2c", local.suffix_unique_safe])), 0, 24)
+      name = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "b2c_tenant", { slug = "b2c", suffix = "" }).slug, local.suffix_safe, lookup(local.overrides, "b2c_tenant", { slug = "b2c", suffix = "" }).suffix]), ), 0, 24)
+      name_unique = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "b2c_tenant", { slug = "b2c", suffix = "" }).slug, local.suffix_unique_safe, lookup(local.overrides, "b2c_tenant", { slug = "b2c", suffix = "" }).suffix])), 0, 24)
       dashes      = false
       slug        = "b2c"
       min_length  = 3
@@ -207,8 +208,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     bastion_host = {
-      name        = substr(join("-", compact([local.prefix, "snap", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "snap", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "bastion_host", { slug = "snap", suffix = "" }).slug, local.suffix, lookup(local.overrides, "bastion_host", { slug = "snap", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "bastion_host", { slug = "snap", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "bastion_host", { slug = "snap", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "snap"
       min_length  = 1
@@ -217,8 +218,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     batch_account = {
-      name        = substr(join("", compact([local.prefix_safe, "ba", local.suffix_safe])), 0, 24)
-      name_unique = substr(join("", compact([local.prefix_safe, "ba", local.suffix_unique_safe])), 0, 24)
+      name = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "batch_account", { slug = "ba", suffix = "" }).slug, local.suffix_safe, lookup(local.overrides, "batch_account", { slug = "ba", suffix = "" }).suffix]), ), 0, 24)
+      name_unique = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "batch_account", { slug = "ba", suffix = "" }).slug, local.suffix_unique_safe, lookup(local.overrides, "batch_account", { slug = "ba", suffix = "" }).suffix])), 0, 24)
       dashes      = false
       slug        = "ba"
       min_length  = 3
@@ -227,8 +228,8 @@ locals {
       regex       = "^[a-z0-9]+$"
     }
     batch_application = {
-      name        = substr(join("-", compact([local.prefix, "baapp", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "baapp", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "batch_application", { slug = "baapp", suffix = "" }).slug, local.suffix, lookup(local.overrides, "batch_application", { slug = "baapp", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "batch_application", { slug = "baapp", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "batch_application", { slug = "baapp", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "baapp"
       min_length  = 1
@@ -237,8 +238,8 @@ locals {
       regex       = "^[a-zA-Z0-9_-]+$"
     }
     batch_certificate = {
-      name        = substr(join("-", compact([local.prefix, "bacert", local.suffix])), 0, 45)
-      name_unique = substr(join("-", compact([local.prefix, "bacert", local.suffix_unique])), 0, 45)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "batch_certificate", { slug = "bacert", suffix = "" }).slug, local.suffix, lookup(local.overrides, "batch_certificate", { slug = "bacert", suffix = "" }).suffix]), ), 0, 45)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "batch_certificate", { slug = "bacert", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "batch_certificate", { slug = "bacert", suffix = "" }).suffix])), 0, 45)
       dashes      = true
       slug        = "bacert"
       min_length  = 5
@@ -247,8 +248,8 @@ locals {
       regex       = "^[a-zA-Z0-9_-]+$"
     }
     batch_pool = {
-      name        = substr(join("-", compact([local.prefix, "bapool", local.suffix])), 0, 24)
-      name_unique = substr(join("-", compact([local.prefix, "bapool", local.suffix_unique])), 0, 24)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "batch_pool", { slug = "bapool", suffix = "" }).slug, local.suffix, lookup(local.overrides, "batch_pool", { slug = "bapool", suffix = "" }).suffix]), ), 0, 24)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "batch_pool", { slug = "bapool", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "batch_pool", { slug = "bapool", suffix = "" }).suffix])), 0, 24)
       dashes      = true
       slug        = "bapool"
       min_length  = 3
@@ -257,8 +258,8 @@ locals {
       regex       = "^[a-zA-Z0-9_-]+$"
     }
     bot_channel_directline = {
-      name        = substr(join("-", compact([local.prefix, "botline", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "botline", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "bot_channel_directline", { slug = "botline", suffix = "" }).slug, local.suffix, lookup(local.overrides, "bot_channel_directline", { slug = "botline", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "bot_channel_directline", { slug = "botline", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "bot_channel_directline", { slug = "botline", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "botline"
       min_length  = 2
@@ -267,8 +268,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-_.]+$"
     }
     bot_channel_email = {
-      name        = substr(join("-", compact([local.prefix, "botmail", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "botmail", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "bot_channel_email", { slug = "botmail", suffix = "" }).slug, local.suffix, lookup(local.overrides, "bot_channel_email", { slug = "botmail", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "bot_channel_email", { slug = "botmail", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "bot_channel_email", { slug = "botmail", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "botmail"
       min_length  = 2
@@ -277,8 +278,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-_.]+$"
     }
     bot_channel_ms_teams = {
-      name        = substr(join("-", compact([local.prefix, "botteams", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "botteams", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "bot_channel_ms_teams", { slug = "botteams", suffix = "" }).slug, local.suffix, lookup(local.overrides, "bot_channel_ms_teams", { slug = "botteams", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "bot_channel_ms_teams", { slug = "botteams", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "bot_channel_ms_teams", { slug = "botteams", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "botteams"
       min_length  = 2
@@ -287,8 +288,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-_.]+$"
     }
     bot_channel_slack = {
-      name        = substr(join("-", compact([local.prefix, "botslack", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "botslack", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "bot_channel_slack", { slug = "botslack", suffix = "" }).slug, local.suffix, lookup(local.overrides, "bot_channel_slack", { slug = "botslack", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "bot_channel_slack", { slug = "botslack", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "bot_channel_slack", { slug = "botslack", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "botslack"
       min_length  = 2
@@ -297,8 +298,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-_.]+$"
     }
     bot_channels_registration = {
-      name        = substr(join("-", compact([local.prefix, "botchan", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "botchan", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "bot_channels_registration", { slug = "botchan", suffix = "" }).slug, local.suffix, lookup(local.overrides, "bot_channels_registration", { slug = "botchan", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "bot_channels_registration", { slug = "botchan", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "bot_channels_registration", { slug = "botchan", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "botchan"
       min_length  = 2
@@ -307,8 +308,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-_.]+$"
     }
     bot_connection = {
-      name        = substr(join("-", compact([local.prefix, "botcon", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "botcon", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "bot_connection", { slug = "botcon", suffix = "" }).slug, local.suffix, lookup(local.overrides, "bot_connection", { slug = "botcon", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "bot_connection", { slug = "botcon", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "bot_connection", { slug = "botcon", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "botcon"
       min_length  = 2
@@ -317,8 +318,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-_.]+$"
     }
     bot_web_app = {
-      name        = substr(join("-", compact([local.prefix, "bot", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "bot", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "bot_web_app", { slug = "bot", suffix = "" }).slug, local.suffix, lookup(local.overrides, "bot_web_app", { slug = "bot", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "bot_web_app", { slug = "bot", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "bot_web_app", { slug = "bot", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "bot"
       min_length  = 2
@@ -327,8 +328,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-_.]+$"
     }
     cdn_endpoint = {
-      name        = substr(join("-", compact([local.prefix, "cdn", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "cdn", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "cdn_endpoint", { slug = "cdn", suffix = "" }).slug, local.suffix, lookup(local.overrides, "cdn_endpoint", { slug = "cdn", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "cdn_endpoint", { slug = "cdn", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "cdn_endpoint", { slug = "cdn", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "cdn"
       min_length  = 1
@@ -337,8 +338,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     cdn_profile = {
-      name        = substr(join("-", compact([local.prefix, "cdnprof", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "cdnprof", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "cdn_profile", { slug = "cdnprof", suffix = "" }).slug, local.suffix, lookup(local.overrides, "cdn_profile", { slug = "cdnprof", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "cdn_profile", { slug = "cdnprof", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "cdn_profile", { slug = "cdnprof", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "cdnprof"
       min_length  = 1
@@ -347,8 +348,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     cognitive_account = {
-      name        = substr(join("-", compact([local.prefix, "cog", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "cog", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "cognitive_account", { slug = "cog", suffix = "" }).slug, local.suffix, lookup(local.overrides, "cognitive_account", { slug = "cog", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "cognitive_account", { slug = "cog", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "cognitive_account", { slug = "cog", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "cog"
       min_length  = 2
@@ -357,8 +358,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+$"
     }
     container_app = {
-      name        = substr(join("-", compact([local.prefix, "ca", local.suffix])), 0, 32)
-      name_unique = substr(join("-", compact([local.prefix, "ca", local.suffix_unique])), 0, 32)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "container_app", { slug = "ca", suffix = "" }).slug, local.suffix, lookup(local.overrides, "container_app", { slug = "ca", suffix = "" }).suffix]), ), 0, 32)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "container_app", { slug = "ca", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "container_app", { slug = "ca", suffix = "" }).suffix])), 0, 32)
       dashes      = true
       slug        = "ca"
       min_length  = 2
@@ -367,8 +368,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+$"
     }
     container_app_environment = {
-      name        = substr(join("-", compact([local.prefix, "cae", local.suffix])), 0, 32)
-      name_unique = substr(join("-", compact([local.prefix, "cae", local.suffix_unique])), 0, 32)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "container_app_environment", { slug = "cae", suffix = "" }).slug, local.suffix, lookup(local.overrides, "container_app_environment", { slug = "cae", suffix = "" }).suffix]), ), 0, 32)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "container_app_environment", { slug = "cae", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "container_app_environment", { slug = "cae", suffix = "" }).suffix])), 0, 32)
       dashes      = true
       slug        = "cae"
       min_length  = 2
@@ -377,8 +378,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+$"
     }
     container_group = {
-      name        = substr(join("-", compact([local.prefix, "cg", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "cg", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "container_group", { slug = "cg", suffix = "" }).slug, local.suffix, lookup(local.overrides, "container_group", { slug = "cg", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "container_group", { slug = "cg", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "container_group", { slug = "cg", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "cg"
       min_length  = 1
@@ -387,8 +388,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     container_registry = {
-      name        = substr(join("", compact([local.prefix_safe, "acr", local.suffix_safe])), 0, 63)
-      name_unique = substr(join("", compact([local.prefix_safe, "acr", local.suffix_unique_safe])), 0, 63)
+      name = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "container_registry", { slug = "acr", suffix = "" }).slug, local.suffix_safe, lookup(local.overrides, "container_registry", { slug = "acr", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "container_registry", { slug = "acr", suffix = "" }).slug, local.suffix_unique_safe, lookup(local.overrides, "container_registry", { slug = "acr", suffix = "" }).suffix])), 0, 63)
       dashes      = false
       slug        = "acr"
       min_length  = 1
@@ -397,8 +398,8 @@ locals {
       regex       = "^[a-zA-Z0-9]+$"
     }
     container_registry_webhook = {
-      name        = substr(join("", compact([local.prefix_safe, "crwh", local.suffix_safe])), 0, 50)
-      name_unique = substr(join("", compact([local.prefix_safe, "crwh", local.suffix_unique_safe])), 0, 50)
+      name = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "container_registry_webhook", { slug = "crwh", suffix = "" }).slug, local.suffix_safe, lookup(local.overrides, "container_registry_webhook", { slug = "crwh", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "container_registry_webhook", { slug = "crwh", suffix = "" }).slug, local.suffix_unique_safe, lookup(local.overrides, "container_registry_webhook", { slug = "crwh", suffix = "" }).suffix])), 0, 50)
       dashes      = false
       slug        = "crwh"
       min_length  = 1
@@ -407,8 +408,8 @@ locals {
       regex       = "^[a-zA-Z0-9]+$"
     }
     cosmosdb_account = {
-      name        = substr(join("-", compact([local.prefix, "cosmos", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "cosmos", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "cosmosdb_account", { slug = "cosmos", suffix = "" }).slug, local.suffix, lookup(local.overrides, "cosmosdb_account", { slug = "cosmos", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "cosmosdb_account", { slug = "cosmos", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "cosmosdb_account", { slug = "cosmos", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "cosmos"
       min_length  = 1
@@ -417,8 +418,8 @@ locals {
       regex       = "^[a-z0-9][a-z0-9-_.]+[a-z0-9]$"
     }
     cosmosdb_cassandra_cluster = {
-      name        = substr(join("-", compact([local.prefix, "mcc", local.suffix])), 0, 44)
-      name_unique = substr(join("-", compact([local.prefix, "mcc", local.suffix_unique])), 0, 44)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "cosmosdb_cassandra_cluster", { slug = "mcc", suffix = "" }).slug, local.suffix, lookup(local.overrides, "cosmosdb_cassandra_cluster", { slug = "mcc", suffix = "" }).suffix]), ), 0, 44)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "cosmosdb_cassandra_cluster", { slug = "mcc", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "cosmosdb_cassandra_cluster", { slug = "mcc", suffix = "" }).suffix])), 0, 44)
       dashes      = true
       slug        = "mcc"
       min_length  = 1
@@ -427,8 +428,8 @@ locals {
       regex       = "^[a-z0-9][a-zA-Z0-9-]+[a-z0-9]$"
     }
     cosmosdb_cassandra_datacenter = {
-      name        = substr(join("-", compact([local.prefix, "mcdc", local.suffix])), 0, 44)
-      name_unique = substr(join("-", compact([local.prefix, "mcdc", local.suffix_unique])), 0, 44)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "cosmosdb_cassandra_datacenter", { slug = "mcdc", suffix = "" }).slug, local.suffix, lookup(local.overrides, "cosmosdb_cassandra_datacenter", { slug = "mcdc", suffix = "" }).suffix]), ), 0, 44)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "cosmosdb_cassandra_datacenter", { slug = "mcdc", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "cosmosdb_cassandra_datacenter", { slug = "mcdc", suffix = "" }).suffix])), 0, 44)
       dashes      = true
       slug        = "mcdc"
       min_length  = 1
@@ -437,8 +438,8 @@ locals {
       regex       = "^[a-z0-9][a-zA-Z0-9-]+[a-z0-9]$"
     }
     cosmosdb_postgres = {
-      name        = substr(join("-", compact([local.prefix, "cospos", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "cospos", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "cosmosdb_postgres", { slug = "cospos", suffix = "" }).slug, local.suffix, lookup(local.overrides, "cosmosdb_postgres", { slug = "cospos", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "cosmosdb_postgres", { slug = "cospos", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "cosmosdb_postgres", { slug = "cospos", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "cospos"
       min_length  = 1
@@ -447,8 +448,8 @@ locals {
       regex       = "^[a-z0-9][a-z0-9-_.]+[a-z0-9]$"
     }
     custom_provider = {
-      name        = substr(join("-", compact([local.prefix, "prov", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "prov", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "custom_provider", { slug = "prov", suffix = "" }).slug, local.suffix, lookup(local.overrides, "custom_provider", { slug = "prov", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "custom_provider", { slug = "prov", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "custom_provider", { slug = "prov", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "prov"
       min_length  = 3
@@ -457,8 +458,8 @@ locals {
       regex       = "^[^&%?\\/]+[^&%.?\\/ ]$"
     }
     dashboard = {
-      name        = substr(join("-", compact([local.prefix, "dsb", local.suffix])), 0, 160)
-      name_unique = substr(join("-", compact([local.prefix, "dsb", local.suffix_unique])), 0, 160)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "dashboard", { slug = "dsb", suffix = "" }).slug, local.suffix, lookup(local.overrides, "dashboard", { slug = "dsb", suffix = "" }).suffix]), ), 0, 160)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "dashboard", { slug = "dsb", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "dashboard", { slug = "dsb", suffix = "" }).suffix])), 0, 160)
       dashes      = true
       slug        = "dsb"
       min_length  = 3
@@ -467,8 +468,8 @@ locals {
       regex       = "^[a-zA-Z0-9-]+$"
     }
     data_factory = {
-      name        = substr(join("-", compact([local.prefix, "adf", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "adf", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory", { slug = "adf", suffix = "" }).slug, local.suffix, lookup(local.overrides, "data_factory", { slug = "adf", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory", { slug = "adf", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "data_factory", { slug = "adf", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "adf"
       min_length  = 3
@@ -477,8 +478,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     data_factory_dataset_mysql = {
-      name        = substr(join("-", compact([local.prefix, "adfmysql", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "adfmysql", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_dataset_mysql", { slug = "adfmysql", suffix = "" }).slug, local.suffix, lookup(local.overrides, "data_factory_dataset_mysql", { slug = "adfmysql", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_dataset_mysql", { slug = "adfmysql", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "data_factory_dataset_mysql", { slug = "adfmysql", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "adfmysql"
       min_length  = 1
@@ -487,8 +488,8 @@ locals {
       regex       = "^[a-zA-Z0-9][^<>*%:.?\\+\\/]+[a-zA-Z0-9]$"
     }
     data_factory_dataset_postgresql = {
-      name        = substr(join("-", compact([local.prefix, "adfpsql", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "adfpsql", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_dataset_postgresql", { slug = "adfpsql", suffix = "" }).slug, local.suffix, lookup(local.overrides, "data_factory_dataset_postgresql", { slug = "adfpsql", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_dataset_postgresql", { slug = "adfpsql", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "data_factory_dataset_postgresql", { slug = "adfpsql", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "adfpsql"
       min_length  = 1
@@ -497,8 +498,8 @@ locals {
       regex       = "^[a-zA-Z0-9][^<>*%:.?\\+\\/]+[a-zA-Z0-9]$"
     }
     data_factory_dataset_sql_server_table = {
-      name        = substr(join("-", compact([local.prefix, "adfmssql", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "adfmssql", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_dataset_sql_server_table", { slug = "adfmssql", suffix = "" }).slug, local.suffix, lookup(local.overrides, "data_factory_dataset_sql_server_table", { slug = "adfmssql", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_dataset_sql_server_table", { slug = "adfmssql", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "data_factory_dataset_sql_server_table", { slug = "adfmssql", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "adfmssql"
       min_length  = 1
@@ -507,8 +508,8 @@ locals {
       regex       = "^[a-zA-Z0-9][^<>*%:.?\\+\\/]+[a-zA-Z0-9]$"
     }
     data_factory_integration_runtime_managed = {
-      name        = substr(join("-", compact([local.prefix, "adfir", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "adfir", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_integration_runtime_managed", { slug = "adfir", suffix = "" }).slug, local.suffix, lookup(local.overrides, "data_factory_integration_runtime_managed", { slug = "adfir", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_integration_runtime_managed", { slug = "adfir", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "data_factory_integration_runtime_managed", { slug = "adfir", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "adfir"
       min_length  = 3
@@ -517,8 +518,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     data_factory_linked_service_data_lake_storage_gen2 = {
-      name        = substr(join("-", compact([local.prefix, "adfsvst", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "adfsvst", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_linked_service_data_lake_storage_gen2", { slug = "adfsvst", suffix = "" }).slug, local.suffix, lookup(local.overrides, "data_factory_linked_service_data_lake_storage_gen2", { slug = "adfsvst", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_linked_service_data_lake_storage_gen2", { slug = "adfsvst", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "data_factory_linked_service_data_lake_storage_gen2", { slug = "adfsvst", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "adfsvst"
       min_length  = 1
@@ -527,8 +528,8 @@ locals {
       regex       = "^[a-zA-Z0-9][^<>*%:.?\\+\\/]+$"
     }
     data_factory_linked_service_key_vault = {
-      name        = substr(join("-", compact([local.prefix, "adfsvkv", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "adfsvkv", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_linked_service_key_vault", { slug = "adfsvkv", suffix = "" }).slug, local.suffix, lookup(local.overrides, "data_factory_linked_service_key_vault", { slug = "adfsvkv", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_linked_service_key_vault", { slug = "adfsvkv", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "data_factory_linked_service_key_vault", { slug = "adfsvkv", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "adfsvkv"
       min_length  = 1
@@ -537,8 +538,8 @@ locals {
       regex       = "^[a-zA-Z0-9][^<>*%:.?\\+\\/]+$"
     }
     data_factory_linked_service_mysql = {
-      name        = substr(join("-", compact([local.prefix, "adfsvmysql", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "adfsvmysql", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_linked_service_mysql", { slug = "adfsvmysql", suffix = "" }).slug, local.suffix, lookup(local.overrides, "data_factory_linked_service_mysql", { slug = "adfsvmysql", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_linked_service_mysql", { slug = "adfsvmysql", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "data_factory_linked_service_mysql", { slug = "adfsvmysql", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "adfsvmysql"
       min_length  = 1
@@ -547,8 +548,8 @@ locals {
       regex       = "^[a-zA-Z0-9][^<>*%:.?\\+\\/]+$"
     }
     data_factory_linked_service_postgresql = {
-      name        = substr(join("-", compact([local.prefix, "adfsvpsql", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "adfsvpsql", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_linked_service_postgresql", { slug = "adfsvpsql", suffix = "" }).slug, local.suffix, lookup(local.overrides, "data_factory_linked_service_postgresql", { slug = "adfsvpsql", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_linked_service_postgresql", { slug = "adfsvpsql", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "data_factory_linked_service_postgresql", { slug = "adfsvpsql", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "adfsvpsql"
       min_length  = 1
@@ -557,8 +558,8 @@ locals {
       regex       = "^[a-zA-Z0-9][^<>*%:.?\\+\\/]+$"
     }
     data_factory_linked_service_sql_server = {
-      name        = substr(join("-", compact([local.prefix, "adfsvmssql", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "adfsvmssql", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_linked_service_sql_server", { slug = "adfsvmssql", suffix = "" }).slug, local.suffix, lookup(local.overrides, "data_factory_linked_service_sql_server", { slug = "adfsvmssql", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_linked_service_sql_server", { slug = "adfsvmssql", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "data_factory_linked_service_sql_server", { slug = "adfsvmssql", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "adfsvmssql"
       min_length  = 1
@@ -567,8 +568,8 @@ locals {
       regex       = "^[a-zA-Z0-9][^<>*%:.?\\+\\/]+$"
     }
     data_factory_pipeline = {
-      name        = substr(join("-", compact([local.prefix, "adfpl", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "adfpl", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_pipeline", { slug = "adfpl", suffix = "" }).slug, local.suffix, lookup(local.overrides, "data_factory_pipeline", { slug = "adfpl", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_pipeline", { slug = "adfpl", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "data_factory_pipeline", { slug = "adfpl", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "adfpl"
       min_length  = 1
@@ -577,8 +578,8 @@ locals {
       regex       = "^[a-zA-Z0-9][^<>*%:.?\\+\\/]+[a-zA-Z0-9]$"
     }
     data_factory_trigger_schedule = {
-      name        = substr(join("-", compact([local.prefix, "adftg", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "adftg", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_trigger_schedule", { slug = "adftg", suffix = "" }).slug, local.suffix, lookup(local.overrides, "data_factory_trigger_schedule", { slug = "adftg", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_factory_trigger_schedule", { slug = "adftg", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "data_factory_trigger_schedule", { slug = "adftg", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "adftg"
       min_length  = 1
@@ -587,8 +588,8 @@ locals {
       regex       = "^[a-zA-Z0-9][^<>*%:.?\\+\\/]+$"
     }
     data_lake_analytics_account = {
-      name        = substr(join("", compact([local.prefix_safe, "dla", local.suffix_safe])), 0, 24)
-      name_unique = substr(join("", compact([local.prefix_safe, "dla", local.suffix_unique_safe])), 0, 24)
+      name = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "data_lake_analytics_account", { slug = "dla", suffix = "" }).slug, local.suffix_safe, lookup(local.overrides, "data_lake_analytics_account", { slug = "dla", suffix = "" }).suffix]), ), 0, 24)
+      name_unique = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "data_lake_analytics_account", { slug = "dla", suffix = "" }).slug, local.suffix_unique_safe, lookup(local.overrides, "data_lake_analytics_account", { slug = "dla", suffix = "" }).suffix])), 0, 24)
       dashes      = false
       slug        = "dla"
       min_length  = 3
@@ -597,8 +598,8 @@ locals {
       regex       = "^[a-z0-9]+$"
     }
     data_lake_analytics_firewall_rule = {
-      name        = substr(join("-", compact([local.prefix, "dlfw", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "dlfw", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_lake_analytics_firewall_rule", { slug = "dlfw", suffix = "" }).slug, local.suffix, lookup(local.overrides, "data_lake_analytics_firewall_rule", { slug = "dlfw", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_lake_analytics_firewall_rule", { slug = "dlfw", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "data_lake_analytics_firewall_rule", { slug = "dlfw", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "dlfw"
       min_length  = 3
@@ -607,8 +608,8 @@ locals {
       regex       = "^[a-z0-9-_]+$"
     }
     data_lake_store = {
-      name        = substr(join("", compact([local.prefix_safe, "dls", local.suffix_safe])), 0, 24)
-      name_unique = substr(join("", compact([local.prefix_safe, "dls", local.suffix_unique_safe])), 0, 24)
+      name = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "data_lake_store", { slug = "dls", suffix = "" }).slug, local.suffix_safe, lookup(local.overrides, "data_lake_store", { slug = "dls", suffix = "" }).suffix]), ), 0, 24)
+      name_unique = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "data_lake_store", { slug = "dls", suffix = "" }).slug, local.suffix_unique_safe, lookup(local.overrides, "data_lake_store", { slug = "dls", suffix = "" }).suffix])), 0, 24)
       dashes      = false
       slug        = "dls"
       min_length  = 3
@@ -617,8 +618,8 @@ locals {
       regex       = "^[a-z0-9]+$"
     }
     data_lake_store_firewall_rule = {
-      name        = substr(join("-", compact([local.prefix, "dlsfw", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "dlsfw", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_lake_store_firewall_rule", { slug = "dlsfw", suffix = "" }).slug, local.suffix, lookup(local.overrides, "data_lake_store_firewall_rule", { slug = "dlsfw", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "data_lake_store_firewall_rule", { slug = "dlsfw", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "data_lake_store_firewall_rule", { slug = "dlsfw", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "dlsfw"
       min_length  = 3
@@ -627,8 +628,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     database_migration_project = {
-      name        = substr(join("-", compact([local.prefix, "migr", local.suffix])), 0, 57)
-      name_unique = substr(join("-", compact([local.prefix, "migr", local.suffix_unique])), 0, 57)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "database_migration_project", { slug = "migr", suffix = "" }).slug, local.suffix, lookup(local.overrides, "database_migration_project", { slug = "migr", suffix = "" }).suffix]), ), 0, 57)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "database_migration_project", { slug = "migr", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "database_migration_project", { slug = "migr", suffix = "" }).suffix])), 0, 57)
       dashes      = true
       slug        = "migr"
       min_length  = 2
@@ -637,8 +638,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-_.]+$"
     }
     database_migration_service = {
-      name        = substr(join("-", compact([local.prefix, "dms", local.suffix])), 0, 62)
-      name_unique = substr(join("-", compact([local.prefix, "dms", local.suffix_unique])), 0, 62)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "database_migration_service", { slug = "dms", suffix = "" }).slug, local.suffix, lookup(local.overrides, "database_migration_service", { slug = "dms", suffix = "" }).suffix]), ), 0, 62)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "database_migration_service", { slug = "dms", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "database_migration_service", { slug = "dms", suffix = "" }).suffix])), 0, 62)
       dashes      = true
       slug        = "dms"
       min_length  = 2
@@ -647,8 +648,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-_.]+$"
     }
     databricks_cluster = {
-      name        = substr(join("-", compact([local.prefix, "dbc", local.suffix])), 0, 30)
-      name_unique = substr(join("-", compact([local.prefix, "dbc", local.suffix_unique])), 0, 30)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "databricks_cluster", { slug = "dbc", suffix = "" }).slug, local.suffix, lookup(local.overrides, "databricks_cluster", { slug = "dbc", suffix = "" }).suffix]), ), 0, 30)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "databricks_cluster", { slug = "dbc", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "databricks_cluster", { slug = "dbc", suffix = "" }).suffix])), 0, 30)
       dashes      = true
       slug        = "dbc"
       min_length  = 3
@@ -657,8 +658,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     databricks_high_concurrency_cluster = {
-      name        = substr(join("-", compact([local.prefix, "dbhcc", local.suffix])), 0, 30)
-      name_unique = substr(join("-", compact([local.prefix, "dbhcc", local.suffix_unique])), 0, 30)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "databricks_high_concurrency_cluster", { slug = "dbhcc", suffix = "" }).slug, local.suffix, lookup(local.overrides, "databricks_high_concurrency_cluster", { slug = "dbhcc", suffix = "" }).suffix]), ), 0, 30)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "databricks_high_concurrency_cluster", { slug = "dbhcc", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "databricks_high_concurrency_cluster", { slug = "dbhcc", suffix = "" }).suffix])), 0, 30)
       dashes      = true
       slug        = "dbhcc"
       min_length  = 3
@@ -667,8 +668,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     databricks_standard_cluster = {
-      name        = substr(join("-", compact([local.prefix, "dbsc", local.suffix])), 0, 30)
-      name_unique = substr(join("-", compact([local.prefix, "dbsc", local.suffix_unique])), 0, 30)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "databricks_standard_cluster", { slug = "dbsc", suffix = "" }).slug, local.suffix, lookup(local.overrides, "databricks_standard_cluster", { slug = "dbsc", suffix = "" }).suffix]), ), 0, 30)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "databricks_standard_cluster", { slug = "dbsc", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "databricks_standard_cluster", { slug = "dbsc", suffix = "" }).suffix])), 0, 30)
       dashes      = true
       slug        = "dbsc"
       min_length  = 3
@@ -677,8 +678,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     databricks_workspace = {
-      name        = substr(join("-", compact([local.prefix, "dbw", local.suffix])), 0, 30)
-      name_unique = substr(join("-", compact([local.prefix, "dbw", local.suffix_unique])), 0, 30)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "databricks_workspace", { slug = "dbw", suffix = "" }).slug, local.suffix, lookup(local.overrides, "databricks_workspace", { slug = "dbw", suffix = "" }).suffix]), ), 0, 30)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "databricks_workspace", { slug = "dbw", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "databricks_workspace", { slug = "dbw", suffix = "" }).suffix])), 0, 30)
       dashes      = true
       slug        = "dbw"
       min_length  = 3
@@ -687,8 +688,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     dev_test_lab = {
-      name        = substr(join("-", compact([local.prefix, "lab", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "lab", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "dev_test_lab", { slug = "lab", suffix = "" }).slug, local.suffix, lookup(local.overrides, "dev_test_lab", { slug = "lab", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "dev_test_lab", { slug = "lab", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "dev_test_lab", { slug = "lab", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "lab"
       min_length  = 1
@@ -697,8 +698,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     dev_test_linux_virtual_machine = {
-      name        = substr(join("-", compact([local.prefix, "labvm", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "labvm", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "dev_test_linux_virtual_machine", { slug = "labvm", suffix = "" }).slug, local.suffix, lookup(local.overrides, "dev_test_linux_virtual_machine", { slug = "labvm", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "dev_test_linux_virtual_machine", { slug = "labvm", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "dev_test_linux_virtual_machine", { slug = "labvm", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "labvm"
       min_length  = 1
@@ -707,8 +708,8 @@ locals {
       regex       = "^[a-zA-Z0-9-]+$"
     }
     dev_test_windows_virtual_machine = {
-      name        = substr(join("-", compact([local.prefix, "labvm", local.suffix])), 0, 15)
-      name_unique = substr(join("-", compact([local.prefix, "labvm", local.suffix_unique])), 0, 15)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "dev_test_windows_virtual_machine", { slug = "labvm", suffix = "" }).slug, local.suffix, lookup(local.overrides, "dev_test_windows_virtual_machine", { slug = "labvm", suffix = "" }).suffix]), ), 0, 15)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "dev_test_windows_virtual_machine", { slug = "labvm", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "dev_test_windows_virtual_machine", { slug = "labvm", suffix = "" }).suffix])), 0, 15)
       dashes      = true
       slug        = "labvm"
       min_length  = 1
@@ -717,8 +718,8 @@ locals {
       regex       = "^[a-zA-Z0-9-]+$"
     }
     disk_encryption_set = {
-      name        = substr(join("-", compact([local.prefix, "des", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "des", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "disk_encryption_set", { slug = "des", suffix = "" }).slug, local.suffix, lookup(local.overrides, "disk_encryption_set", { slug = "des", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "disk_encryption_set", { slug = "des", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "disk_encryption_set", { slug = "des", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "des"
       min_length  = 1
@@ -727,8 +728,8 @@ locals {
       regex       = "^[a-zA-Z0-9_]+$"
     }
     dns_a_record = {
-      name        = substr(join("-", compact([local.prefix, "dnsrec", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "dnsrec", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_a_record", { slug = "dnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "dns_a_record", { slug = "dnsrec", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_a_record", { slug = "dnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "dns_a_record", { slug = "dnsrec", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "dnsrec"
       min_length  = 1
@@ -737,8 +738,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     dns_aaaa_record = {
-      name        = substr(join("-", compact([local.prefix, "dnsrec", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "dnsrec", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_aaaa_record", { slug = "dnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "dns_aaaa_record", { slug = "dnsrec", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_aaaa_record", { slug = "dnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "dns_aaaa_record", { slug = "dnsrec", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "dnsrec"
       min_length  = 1
@@ -747,8 +748,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     dns_caa_record = {
-      name        = substr(join("-", compact([local.prefix, "dnsrec", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "dnsrec", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_caa_record", { slug = "dnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "dns_caa_record", { slug = "dnsrec", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_caa_record", { slug = "dnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "dns_caa_record", { slug = "dnsrec", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "dnsrec"
       min_length  = 1
@@ -757,8 +758,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     dns_cname_record = {
-      name        = substr(join("-", compact([local.prefix, "dnsrec", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "dnsrec", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_cname_record", { slug = "dnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "dns_cname_record", { slug = "dnsrec", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_cname_record", { slug = "dnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "dns_cname_record", { slug = "dnsrec", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "dnsrec"
       min_length  = 1
@@ -767,8 +768,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     dns_mx_record = {
-      name        = substr(join("-", compact([local.prefix, "dnsrec", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "dnsrec", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_mx_record", { slug = "dnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "dns_mx_record", { slug = "dnsrec", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_mx_record", { slug = "dnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "dns_mx_record", { slug = "dnsrec", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "dnsrec"
       min_length  = 1
@@ -777,8 +778,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     dns_ns_record = {
-      name        = substr(join("-", compact([local.prefix, "dnsrec", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "dnsrec", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_ns_record", { slug = "dnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "dns_ns_record", { slug = "dnsrec", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_ns_record", { slug = "dnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "dns_ns_record", { slug = "dnsrec", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "dnsrec"
       min_length  = 1
@@ -787,8 +788,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     dns_ptr_record = {
-      name        = substr(join("-", compact([local.prefix, "dnsrec", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "dnsrec", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_ptr_record", { slug = "dnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "dns_ptr_record", { slug = "dnsrec", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_ptr_record", { slug = "dnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "dns_ptr_record", { slug = "dnsrec", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "dnsrec"
       min_length  = 1
@@ -797,8 +798,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     dns_txt_record = {
-      name        = substr(join("-", compact([local.prefix, "dnsrec", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "dnsrec", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_txt_record", { slug = "dnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "dns_txt_record", { slug = "dnsrec", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_txt_record", { slug = "dnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "dns_txt_record", { slug = "dnsrec", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "dnsrec"
       min_length  = 1
@@ -807,8 +808,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     dns_zone = {
-      name        = substr(join("-", compact([local.prefix, "dns", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "dns", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_zone", { slug = "dns", suffix = "" }).slug, local.suffix, lookup(local.overrides, "dns_zone", { slug = "dns", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "dns_zone", { slug = "dns", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "dns_zone", { slug = "dns", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "dns"
       min_length  = 1
@@ -817,8 +818,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     eventgrid_domain = {
-      name        = substr(join("-", compact([local.prefix, "egd", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "egd", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventgrid_domain", { slug = "egd", suffix = "" }).slug, local.suffix, lookup(local.overrides, "eventgrid_domain", { slug = "egd", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventgrid_domain", { slug = "egd", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "eventgrid_domain", { slug = "egd", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "egd"
       min_length  = 3
@@ -827,8 +828,8 @@ locals {
       regex       = "^[a-zA-Z0-9-]+$"
     }
     eventgrid_domain_topic = {
-      name        = substr(join("-", compact([local.prefix, "egdt", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "egdt", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventgrid_domain_topic", { slug = "egdt", suffix = "" }).slug, local.suffix, lookup(local.overrides, "eventgrid_domain_topic", { slug = "egdt", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventgrid_domain_topic", { slug = "egdt", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "eventgrid_domain_topic", { slug = "egdt", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "egdt"
       min_length  = 3
@@ -837,8 +838,8 @@ locals {
       regex       = "^[a-zA-Z0-9-]+$"
     }
     eventgrid_event_subscription = {
-      name        = substr(join("-", compact([local.prefix, "egs", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "egs", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventgrid_event_subscription", { slug = "egs", suffix = "" }).slug, local.suffix, lookup(local.overrides, "eventgrid_event_subscription", { slug = "egs", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventgrid_event_subscription", { slug = "egs", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "eventgrid_event_subscription", { slug = "egs", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "egs"
       min_length  = 3
@@ -847,8 +848,8 @@ locals {
       regex       = "^[a-zA-Z0-9-]+$"
     }
     eventgrid_topic = {
-      name        = substr(join("-", compact([local.prefix, "egt", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "egt", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventgrid_topic", { slug = "egt", suffix = "" }).slug, local.suffix, lookup(local.overrides, "eventgrid_topic", { slug = "egt", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventgrid_topic", { slug = "egt", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "eventgrid_topic", { slug = "egt", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "egt"
       min_length  = 3
@@ -857,8 +858,8 @@ locals {
       regex       = "^[a-zA-Z0-9-]+$"
     }
     eventhub = {
-      name        = substr(join("-", compact([local.prefix, "evh", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "evh", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventhub", { slug = "evh", suffix = "" }).slug, local.suffix, lookup(local.overrides, "eventhub", { slug = "evh", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventhub", { slug = "evh", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "eventhub", { slug = "evh", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "evh"
       min_length  = 1
@@ -867,8 +868,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9]$"
     }
     eventhub_authorization_rule = {
-      name        = substr(join("-", compact([local.prefix, "ehar", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "ehar", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventhub_authorization_rule", { slug = "ehar", suffix = "" }).slug, local.suffix, lookup(local.overrides, "eventhub_authorization_rule", { slug = "ehar", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventhub_authorization_rule", { slug = "ehar", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "eventhub_authorization_rule", { slug = "ehar", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "ehar"
       min_length  = 1
@@ -877,8 +878,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9]$"
     }
     eventhub_consumer_group = {
-      name        = substr(join("-", compact([local.prefix, "ehcg", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "ehcg", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventhub_consumer_group", { slug = "ehcg", suffix = "" }).slug, local.suffix, lookup(local.overrides, "eventhub_consumer_group", { slug = "ehcg", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventhub_consumer_group", { slug = "ehcg", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "eventhub_consumer_group", { slug = "ehcg", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "ehcg"
       min_length  = 1
@@ -887,8 +888,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9]$"
     }
     eventhub_namespace = {
-      name        = substr(join("-", compact([local.prefix, "ehn", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "ehn", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventhub_namespace", { slug = "ehn", suffix = "" }).slug, local.suffix, lookup(local.overrides, "eventhub_namespace", { slug = "ehn", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventhub_namespace", { slug = "ehn", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "eventhub_namespace", { slug = "ehn", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "ehn"
       min_length  = 1
@@ -897,8 +898,8 @@ locals {
       regex       = "^[a-zA-Z][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     eventhub_namespace_authorization_rule = {
-      name        = substr(join("-", compact([local.prefix, "ehnar", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "ehnar", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventhub_namespace_authorization_rule", { slug = "ehnar", suffix = "" }).slug, local.suffix, lookup(local.overrides, "eventhub_namespace_authorization_rule", { slug = "ehnar", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventhub_namespace_authorization_rule", { slug = "ehnar", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "eventhub_namespace_authorization_rule", { slug = "ehnar", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "ehnar"
       min_length  = 1
@@ -907,8 +908,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9]$"
     }
     eventhub_namespace_disaster_recovery_config = {
-      name        = substr(join("-", compact([local.prefix, "ehdr", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "ehdr", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventhub_namespace_disaster_recovery_config", { slug = "ehdr", suffix = "" }).slug, local.suffix, lookup(local.overrides, "eventhub_namespace_disaster_recovery_config", { slug = "ehdr", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "eventhub_namespace_disaster_recovery_config", { slug = "ehdr", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "eventhub_namespace_disaster_recovery_config", { slug = "ehdr", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "ehdr"
       min_length  = 1
@@ -917,8 +918,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9]$"
     }
     express_route_circuit = {
-      name        = substr(join("-", compact([local.prefix, "erc", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "erc", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "express_route_circuit", { slug = "erc", suffix = "" }).slug, local.suffix, lookup(local.overrides, "express_route_circuit", { slug = "erc", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "express_route_circuit", { slug = "erc", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "express_route_circuit", { slug = "erc", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "erc"
       min_length  = 1
@@ -927,8 +928,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     express_route_gateway = {
-      name        = substr(join("-", compact([local.prefix, "ergw", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "ergw", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "express_route_gateway", { slug = "ergw", suffix = "" }).slug, local.suffix, lookup(local.overrides, "express_route_gateway", { slug = "ergw", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "express_route_gateway", { slug = "ergw", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "express_route_gateway", { slug = "ergw", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "ergw"
       min_length  = 1
@@ -937,8 +938,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     firewall = {
-      name        = substr(join("-", compact([local.prefix, "fw", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "fw", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "firewall", { slug = "fw", suffix = "" }).slug, local.suffix, lookup(local.overrides, "firewall", { slug = "fw", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "firewall", { slug = "fw", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "firewall", { slug = "fw", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "fw"
       min_length  = 1
@@ -947,8 +948,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     firewall_application_rule_collection = {
-      name        = substr(join("-", compact([local.prefix, "fwapp", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "fwapp", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "firewall_application_rule_collection", { slug = "fwapp", suffix = "" }).slug, local.suffix, lookup(local.overrides, "firewall_application_rule_collection", { slug = "fwapp", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "firewall_application_rule_collection", { slug = "fwapp", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "firewall_application_rule_collection", { slug = "fwapp", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "fwapp"
       min_length  = 1
@@ -957,8 +958,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9\\-\\._]+[a-zA-Z0-9_]$"
     }
     firewall_ip_configuration = {
-      name        = substr(join("-", compact([local.prefix, "fwipconf", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "fwipconf", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "firewall_ip_configuration", { slug = "fwipconf", suffix = "" }).slug, local.suffix, lookup(local.overrides, "firewall_ip_configuration", { slug = "fwipconf", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "firewall_ip_configuration", { slug = "fwipconf", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "firewall_ip_configuration", { slug = "fwipconf", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "fwipconf"
       min_length  = 1
@@ -967,8 +968,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9\\-\\._]+[a-zA-Z0-9_]$"
     }
     firewall_nat_rule_collection = {
-      name        = substr(join("-", compact([local.prefix, "fwnatrc", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "fwnatrc", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "firewall_nat_rule_collection", { slug = "fwnatrc", suffix = "" }).slug, local.suffix, lookup(local.overrides, "firewall_nat_rule_collection", { slug = "fwnatrc", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "firewall_nat_rule_collection", { slug = "fwnatrc", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "firewall_nat_rule_collection", { slug = "fwnatrc", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "fwnatrc"
       min_length  = 1
@@ -977,8 +978,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9\\-\\._]+[a-zA-Z0-9_]$"
     }
     firewall_network_rule_collection = {
-      name        = substr(join("-", compact([local.prefix, "fwnetrc", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "fwnetrc", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "firewall_network_rule_collection", { slug = "fwnetrc", suffix = "" }).slug, local.suffix, lookup(local.overrides, "firewall_network_rule_collection", { slug = "fwnetrc", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "firewall_network_rule_collection", { slug = "fwnetrc", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "firewall_network_rule_collection", { slug = "fwnetrc", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "fwnetrc"
       min_length  = 1
@@ -987,8 +988,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9\\-\\._]+[a-zA-Z0-9_]$"
     }
     firewall_policy = {
-      name        = substr(join("-", compact([local.prefix, "afwp", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "afwp", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "firewall_policy", { slug = "afwp", suffix = "" }).slug, local.suffix, lookup(local.overrides, "firewall_policy", { slug = "afwp", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "firewall_policy", { slug = "afwp", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "firewall_policy", { slug = "afwp", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "afwp"
       min_length  = 1
@@ -997,8 +998,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     firewall_policy_rule_collection_group = {
-      name        = substr(join("-", compact([local.prefix, "fwprcg", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "fwprcg", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "firewall_policy_rule_collection_group", { slug = "fwprcg", suffix = "" }).slug, local.suffix, lookup(local.overrides, "firewall_policy_rule_collection_group", { slug = "fwprcg", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "firewall_policy_rule_collection_group", { slug = "fwprcg", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "firewall_policy_rule_collection_group", { slug = "fwprcg", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "fwprcg"
       min_length  = 1
@@ -1007,8 +1008,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9\\-\\._]+[a-zA-Z0-9_]$"
     }
     frontdoor = {
-      name        = substr(join("-", compact([local.prefix, "fd", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "fd", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "frontdoor", { slug = "fd", suffix = "" }).slug, local.suffix, lookup(local.overrides, "frontdoor", { slug = "fd", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "frontdoor", { slug = "fd", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "frontdoor", { slug = "fd", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "fd"
       min_length  = 5
@@ -1017,8 +1018,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     frontdoor_custom_domain = {
-      name        = substr(join("-", compact([local.prefix, "fdcd", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "fdcd", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "frontdoor_custom_domain", { slug = "fdcd", suffix = "" }).slug, local.suffix, lookup(local.overrides, "frontdoor_custom_domain", { slug = "fdcd", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "frontdoor_custom_domain", { slug = "fdcd", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "frontdoor_custom_domain", { slug = "fdcd", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "fdcd"
       min_length  = 1
@@ -1027,8 +1028,8 @@ locals {
       regex       = "^[a-z][a-zA-Z0-9-]+$"
     }
     frontdoor_firewall_policy = {
-      name        = substr(join("", compact([local.prefix_safe, "fdfw", local.suffix_safe])), 0, 128)
-      name_unique = substr(join("", compact([local.prefix_safe, "fdfw", local.suffix_unique_safe])), 0, 128)
+      name = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "frontdoor_firewall_policy", { slug = "fdfw", suffix = "" }).slug, local.suffix_safe, lookup(local.overrides, "frontdoor_firewall_policy", { slug = "fdfw", suffix = "" }).suffix]), ), 0, 128)
+      name_unique = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "frontdoor_firewall_policy", { slug = "fdfw", suffix = "" }).slug, local.suffix_unique_safe, lookup(local.overrides, "frontdoor_firewall_policy", { slug = "fdfw", suffix = "" }).suffix])), 0, 128)
       dashes      = false
       slug        = "fdfw"
       min_length  = 1
@@ -1037,8 +1038,8 @@ locals {
       regex       = "(^[a-zA-Z])([0-9a-zA-Z]{0,127})$"
     }
     frontdoor_origin = {
-      name        = substr(join("-", compact([local.prefix, "fdo", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "fdo", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "frontdoor_origin", { slug = "fdo", suffix = "" }).slug, local.suffix, lookup(local.overrides, "frontdoor_origin", { slug = "fdo", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "frontdoor_origin", { slug = "fdo", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "frontdoor_origin", { slug = "fdo", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "fdo"
       min_length  = 1
@@ -1047,8 +1048,8 @@ locals {
       regex       = "^[a-z][a-zA-Z0-9-]+$"
     }
     frontdoor_origin_group = {
-      name        = substr(join("-", compact([local.prefix, "fdog", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "fdog", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "frontdoor_origin_group", { slug = "fdog", suffix = "" }).slug, local.suffix, lookup(local.overrides, "frontdoor_origin_group", { slug = "fdog", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "frontdoor_origin_group", { slug = "fdog", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "frontdoor_origin_group", { slug = "fdog", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "fdog"
       min_length  = 1
@@ -1057,8 +1058,8 @@ locals {
       regex       = "^[a-z][a-zA-Z0-9-]+$"
     }
     frontdoor_ruleset = {
-      name        = substr(join("", compact([local.prefix_safe, "fdrs", local.suffix_safe])), 0, 50)
-      name_unique = substr(join("", compact([local.prefix_safe, "fdrs", local.suffix_unique_safe])), 0, 50)
+      name = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "frontdoor_ruleset", { slug = "fdrs", suffix = "" }).slug, local.suffix_safe, lookup(local.overrides, "frontdoor_ruleset", { slug = "fdrs", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "frontdoor_ruleset", { slug = "fdrs", suffix = "" }).slug, local.suffix_unique_safe, lookup(local.overrides, "frontdoor_ruleset", { slug = "fdrs", suffix = "" }).suffix])), 0, 50)
       dashes      = false
       slug        = "fdrs"
       min_length  = 1
@@ -1067,8 +1068,8 @@ locals {
       regex       = "^[a-z][a-zA-Z0-9]+$"
     }
     frontdoor_security_policy = {
-      name        = substr(join("", compact([local.prefix_safe, "fdsp", local.suffix_safe])), 0, 50)
-      name_unique = substr(join("", compact([local.prefix_safe, "fdsp", local.suffix_unique_safe])), 0, 50)
+      name = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "frontdoor_security_policy", { slug = "fdsp", suffix = "" }).slug, local.suffix_safe, lookup(local.overrides, "frontdoor_security_policy", { slug = "fdsp", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "frontdoor_security_policy", { slug = "fdsp", suffix = "" }).slug, local.suffix_unique_safe, lookup(local.overrides, "frontdoor_security_policy", { slug = "fdsp", suffix = "" }).suffix])), 0, 50)
       dashes      = false
       slug        = "fdsp"
       min_length  = 1
@@ -1077,8 +1078,8 @@ locals {
       regex       = "^[a-z][a-zA-Z0-9]+$"
     }
     function_app = {
-      name        = substr(join("-", compact([local.prefix, "func", local.suffix])), 0, 60)
-      name_unique = substr(join("-", compact([local.prefix, "func", local.suffix_unique])), 0, 60)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "function_app", { slug = "func", suffix = "" }).slug, local.suffix, lookup(local.overrides, "function_app", { slug = "func", suffix = "" }).suffix]), ), 0, 60)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "function_app", { slug = "func", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "function_app", { slug = "func", suffix = "" }).suffix])), 0, 60)
       dashes      = true
       slug        = "func"
       min_length  = 2
@@ -1087,8 +1088,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     hdinsight_hadoop_cluster = {
-      name        = substr(join("-", compact([local.prefix, "hadoop", local.suffix])), 0, 59)
-      name_unique = substr(join("-", compact([local.prefix, "hadoop", local.suffix_unique])), 0, 59)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "hdinsight_hadoop_cluster", { slug = "hadoop", suffix = "" }).slug, local.suffix, lookup(local.overrides, "hdinsight_hadoop_cluster", { slug = "hadoop", suffix = "" }).suffix]), ), 0, 59)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "hdinsight_hadoop_cluster", { slug = "hadoop", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "hdinsight_hadoop_cluster", { slug = "hadoop", suffix = "" }).suffix])), 0, 59)
       dashes      = true
       slug        = "hadoop"
       min_length  = 3
@@ -1097,8 +1098,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     hdinsight_hbase_cluster = {
-      name        = substr(join("-", compact([local.prefix, "hbase", local.suffix])), 0, 59)
-      name_unique = substr(join("-", compact([local.prefix, "hbase", local.suffix_unique])), 0, 59)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "hdinsight_hbase_cluster", { slug = "hbase", suffix = "" }).slug, local.suffix, lookup(local.overrides, "hdinsight_hbase_cluster", { slug = "hbase", suffix = "" }).suffix]), ), 0, 59)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "hdinsight_hbase_cluster", { slug = "hbase", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "hdinsight_hbase_cluster", { slug = "hbase", suffix = "" }).suffix])), 0, 59)
       dashes      = true
       slug        = "hbase"
       min_length  = 3
@@ -1107,8 +1108,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     hdinsight_interactive_query_cluster = {
-      name        = substr(join("-", compact([local.prefix, "iqr", local.suffix])), 0, 59)
-      name_unique = substr(join("-", compact([local.prefix, "iqr", local.suffix_unique])), 0, 59)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "hdinsight_interactive_query_cluster", { slug = "iqr", suffix = "" }).slug, local.suffix, lookup(local.overrides, "hdinsight_interactive_query_cluster", { slug = "iqr", suffix = "" }).suffix]), ), 0, 59)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "hdinsight_interactive_query_cluster", { slug = "iqr", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "hdinsight_interactive_query_cluster", { slug = "iqr", suffix = "" }).suffix])), 0, 59)
       dashes      = true
       slug        = "iqr"
       min_length  = 3
@@ -1117,8 +1118,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     hdinsight_kafka_cluster = {
-      name        = substr(join("-", compact([local.prefix, "kafka", local.suffix])), 0, 59)
-      name_unique = substr(join("-", compact([local.prefix, "kafka", local.suffix_unique])), 0, 59)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "hdinsight_kafka_cluster", { slug = "kafka", suffix = "" }).slug, local.suffix, lookup(local.overrides, "hdinsight_kafka_cluster", { slug = "kafka", suffix = "" }).suffix]), ), 0, 59)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "hdinsight_kafka_cluster", { slug = "kafka", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "hdinsight_kafka_cluster", { slug = "kafka", suffix = "" }).suffix])), 0, 59)
       dashes      = true
       slug        = "kafka"
       min_length  = 3
@@ -1127,8 +1128,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     hdinsight_ml_services_cluster = {
-      name        = substr(join("-", compact([local.prefix, "mls", local.suffix])), 0, 59)
-      name_unique = substr(join("-", compact([local.prefix, "mls", local.suffix_unique])), 0, 59)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "hdinsight_ml_services_cluster", { slug = "mls", suffix = "" }).slug, local.suffix, lookup(local.overrides, "hdinsight_ml_services_cluster", { slug = "mls", suffix = "" }).suffix]), ), 0, 59)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "hdinsight_ml_services_cluster", { slug = "mls", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "hdinsight_ml_services_cluster", { slug = "mls", suffix = "" }).suffix])), 0, 59)
       dashes      = true
       slug        = "mls"
       min_length  = 3
@@ -1137,8 +1138,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     hdinsight_rserver_cluster = {
-      name        = substr(join("-", compact([local.prefix, "rsv", local.suffix])), 0, 59)
-      name_unique = substr(join("-", compact([local.prefix, "rsv", local.suffix_unique])), 0, 59)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "hdinsight_rserver_cluster", { slug = "rsv", suffix = "" }).slug, local.suffix, lookup(local.overrides, "hdinsight_rserver_cluster", { slug = "rsv", suffix = "" }).suffix]), ), 0, 59)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "hdinsight_rserver_cluster", { slug = "rsv", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "hdinsight_rserver_cluster", { slug = "rsv", suffix = "" }).suffix])), 0, 59)
       dashes      = true
       slug        = "rsv"
       min_length  = 3
@@ -1147,8 +1148,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     hdinsight_spark_cluster = {
-      name        = substr(join("-", compact([local.prefix, "spark", local.suffix])), 0, 59)
-      name_unique = substr(join("-", compact([local.prefix, "spark", local.suffix_unique])), 0, 59)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "hdinsight_spark_cluster", { slug = "spark", suffix = "" }).slug, local.suffix, lookup(local.overrides, "hdinsight_spark_cluster", { slug = "spark", suffix = "" }).suffix]), ), 0, 59)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "hdinsight_spark_cluster", { slug = "spark", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "hdinsight_spark_cluster", { slug = "spark", suffix = "" }).suffix])), 0, 59)
       dashes      = true
       slug        = "spark"
       min_length  = 3
@@ -1157,8 +1158,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     hdinsight_storm_cluster = {
-      name        = substr(join("-", compact([local.prefix, "storm", local.suffix])), 0, 59)
-      name_unique = substr(join("-", compact([local.prefix, "storm", local.suffix_unique])), 0, 59)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "hdinsight_storm_cluster", { slug = "storm", suffix = "" }).slug, local.suffix, lookup(local.overrides, "hdinsight_storm_cluster", { slug = "storm", suffix = "" }).suffix]), ), 0, 59)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "hdinsight_storm_cluster", { slug = "storm", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "hdinsight_storm_cluster", { slug = "storm", suffix = "" }).suffix])), 0, 59)
       dashes      = true
       slug        = "storm"
       min_length  = 3
@@ -1167,8 +1168,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     image = {
-      name        = substr(join("-", compact([local.prefix, "img", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "img", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "image", { slug = "img", suffix = "" }).slug, local.suffix, lookup(local.overrides, "image", { slug = "img", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "image", { slug = "img", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "image", { slug = "img", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "img"
       min_length  = 1
@@ -1177,8 +1178,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-_.]+[a-zA-Z0-9_]$"
     }
     iotcentral_application = {
-      name        = substr(join("-", compact([local.prefix, "iotapp", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "iotapp", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "iotcentral_application", { slug = "iotapp", suffix = "" }).slug, local.suffix, lookup(local.overrides, "iotcentral_application", { slug = "iotapp", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "iotcentral_application", { slug = "iotapp", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "iotcentral_application", { slug = "iotapp", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "iotapp"
       min_length  = 2
@@ -1187,8 +1188,8 @@ locals {
       regex       = "^[a-z0-9][a-z0-9-]+[a-z0-9]$"
     }
     iothub = {
-      name        = substr(join("-", compact([local.prefix, "iot", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "iot", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "iothub", { slug = "iot", suffix = "" }).slug, local.suffix, lookup(local.overrides, "iothub", { slug = "iot", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "iothub", { slug = "iot", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "iothub", { slug = "iot", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "iot"
       min_length  = 3
@@ -1197,8 +1198,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-z0-9]$"
     }
     iothub_consumer_group = {
-      name        = substr(join("-", compact([local.prefix, "iotcg", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "iotcg", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "iothub_consumer_group", { slug = "iotcg", suffix = "" }).slug, local.suffix, lookup(local.overrides, "iothub_consumer_group", { slug = "iotcg", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "iothub_consumer_group", { slug = "iotcg", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "iothub_consumer_group", { slug = "iotcg", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "iotcg"
       min_length  = 1
@@ -1207,8 +1208,8 @@ locals {
       regex       = "^[a-zA-Z0-9-._]+$"
     }
     iothub_dps = {
-      name        = substr(join("-", compact([local.prefix, "dps", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "dps", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "iothub_dps", { slug = "dps", suffix = "" }).slug, local.suffix, lookup(local.overrides, "iothub_dps", { slug = "dps", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "iothub_dps", { slug = "dps", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "iothub_dps", { slug = "dps", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "dps"
       min_length  = 3
@@ -1217,8 +1218,8 @@ locals {
       regex       = "^[a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     iothub_dps_certificate = {
-      name        = substr(join("-", compact([local.prefix, "dpscert", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "dpscert", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "iothub_dps_certificate", { slug = "dpscert", suffix = "" }).slug, local.suffix, lookup(local.overrides, "iothub_dps_certificate", { slug = "dpscert", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "iothub_dps_certificate", { slug = "dpscert", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "iothub_dps_certificate", { slug = "dpscert", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "dpscert"
       min_length  = 1
@@ -1227,8 +1228,8 @@ locals {
       regex       = "^[a-zA-Z0-9-._]+$"
     }
     key_vault = {
-      name        = substr(join("-", compact([local.prefix, "kv", local.suffix])), 0, 24)
-      name_unique = substr(join("-", compact([local.prefix, "kv", local.suffix_unique])), 0, 24)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "key_vault", { slug = "kv", suffix = "" }).slug, local.suffix, lookup(local.overrides, "key_vault", { slug = "kv", suffix = "" }).suffix]), ), 0, 24)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "key_vault", { slug = "kv", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "key_vault", { slug = "kv", suffix = "" }).suffix])), 0, 24)
       dashes      = true
       slug        = "kv"
       min_length  = 3
@@ -1237,8 +1238,8 @@ locals {
       regex       = "^[a-zA-Z][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     key_vault_certificate = {
-      name        = substr(join("-", compact([local.prefix, "kvc", local.suffix])), 0, 127)
-      name_unique = substr(join("-", compact([local.prefix, "kvc", local.suffix_unique])), 0, 127)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "key_vault_certificate", { slug = "kvc", suffix = "" }).slug, local.suffix, lookup(local.overrides, "key_vault_certificate", { slug = "kvc", suffix = "" }).suffix]), ), 0, 127)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "key_vault_certificate", { slug = "kvc", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "key_vault_certificate", { slug = "kvc", suffix = "" }).suffix])), 0, 127)
       dashes      = true
       slug        = "kvc"
       min_length  = 1
@@ -1247,8 +1248,8 @@ locals {
       regex       = "^[a-zA-Z0-9-]+$"
     }
     key_vault_key = {
-      name        = substr(join("-", compact([local.prefix, "kvk", local.suffix])), 0, 127)
-      name_unique = substr(join("-", compact([local.prefix, "kvk", local.suffix_unique])), 0, 127)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "key_vault_key", { slug = "kvk", suffix = "" }).slug, local.suffix, lookup(local.overrides, "key_vault_key", { slug = "kvk", suffix = "" }).suffix]), ), 0, 127)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "key_vault_key", { slug = "kvk", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "key_vault_key", { slug = "kvk", suffix = "" }).suffix])), 0, 127)
       dashes      = true
       slug        = "kvk"
       min_length  = 1
@@ -1257,8 +1258,8 @@ locals {
       regex       = "^[a-zA-Z0-9-]+$"
     }
     key_vault_secret = {
-      name        = substr(join("-", compact([local.prefix, "kvs", local.suffix])), 0, 127)
-      name_unique = substr(join("-", compact([local.prefix, "kvs", local.suffix_unique])), 0, 127)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "key_vault_secret", { slug = "kvs", suffix = "" }).slug, local.suffix, lookup(local.overrides, "key_vault_secret", { slug = "kvs", suffix = "" }).suffix]), ), 0, 127)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "key_vault_secret", { slug = "kvs", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "key_vault_secret", { slug = "kvs", suffix = "" }).suffix])), 0, 127)
       dashes      = true
       slug        = "kvs"
       min_length  = 1
@@ -1267,8 +1268,8 @@ locals {
       regex       = "^[a-zA-Z0-9-]+$"
     }
     kubernetes_cluster = {
-      name        = substr(join("-", compact([local.prefix, "aks", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "aks", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "kubernetes_cluster", { slug = "aks", suffix = "" }).slug, local.suffix, lookup(local.overrides, "kubernetes_cluster", { slug = "aks", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "kubernetes_cluster", { slug = "aks", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "kubernetes_cluster", { slug = "aks", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "aks"
       min_length  = 1
@@ -1277,8 +1278,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-_.]+[a-zA-Z0-9]$"
     }
     kusto_cluster = {
-      name        = substr(join("", compact([local.prefix_safe, "kc", local.suffix_safe])), 0, 22)
-      name_unique = substr(join("", compact([local.prefix_safe, "kc", local.suffix_unique_safe])), 0, 22)
+      name = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "kusto_cluster", { slug = "kc", suffix = "" }).slug, local.suffix_safe, lookup(local.overrides, "kusto_cluster", { slug = "kc", suffix = "" }).suffix]), ), 0, 22)
+      name_unique = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "kusto_cluster", { slug = "kc", suffix = "" }).slug, local.suffix_unique_safe, lookup(local.overrides, "kusto_cluster", { slug = "kc", suffix = "" }).suffix])), 0, 22)
       dashes      = false
       slug        = "kc"
       min_length  = 4
@@ -1287,8 +1288,8 @@ locals {
       regex       = "^[a-z][a-z0-9]+$"
     }
     kusto_database = {
-      name        = substr(join("-", compact([local.prefix, "kdb", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "kdb", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "kusto_database", { slug = "kdb", suffix = "" }).slug, local.suffix, lookup(local.overrides, "kusto_database", { slug = "kdb", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "kusto_database", { slug = "kdb", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "kusto_database", { slug = "kdb", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "kdb"
       min_length  = 1
@@ -1297,8 +1298,8 @@ locals {
       regex       = "^[a-zA-Z0-9- .]+$"
     }
     kusto_eventhub_data_connection = {
-      name        = substr(join("-", compact([local.prefix, "kehc", local.suffix])), 0, 40)
-      name_unique = substr(join("-", compact([local.prefix, "kehc", local.suffix_unique])), 0, 40)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "kusto_eventhub_data_connection", { slug = "kehc", suffix = "" }).slug, local.suffix, lookup(local.overrides, "kusto_eventhub_data_connection", { slug = "kehc", suffix = "" }).suffix]), ), 0, 40)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "kusto_eventhub_data_connection", { slug = "kehc", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "kusto_eventhub_data_connection", { slug = "kehc", suffix = "" }).suffix])), 0, 40)
       dashes      = true
       slug        = "kehc"
       min_length  = 1
@@ -1307,8 +1308,8 @@ locals {
       regex       = "^[a-zA-Z0-9- .]+$"
     }
     lb = {
-      name        = substr(join("-", compact([local.prefix, "lb", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "lb", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "lb", { slug = "lb", suffix = "" }).slug, local.suffix, lookup(local.overrides, "lb", { slug = "lb", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "lb", { slug = "lb", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "lb", { slug = "lb", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "lb"
       min_length  = 1
@@ -1317,8 +1318,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     lb_nat_rule = {
-      name        = substr(join("-", compact([local.prefix, "lbnatrl", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "lbnatrl", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "lb_nat_rule", { slug = "lbnatrl", suffix = "" }).slug, local.suffix, lookup(local.overrides, "lb_nat_rule", { slug = "lbnatrl", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "lb_nat_rule", { slug = "lbnatrl", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "lb_nat_rule", { slug = "lbnatrl", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "lbnatrl"
       min_length  = 1
@@ -1327,8 +1328,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     linux_virtual_machine = {
-      name        = substr(join("-", compact([local.prefix, "vm", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "vm", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "linux_virtual_machine", { slug = "vm", suffix = "" }).slug, local.suffix, lookup(local.overrides, "linux_virtual_machine", { slug = "vm", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "linux_virtual_machine", { slug = "vm", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "linux_virtual_machine", { slug = "vm", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "vm"
       min_length  = 1
@@ -1337,8 +1338,8 @@ locals {
       regex       = "^[^\\/\"\\[\\]:|<>+=;,?*@&_][^\\/\"\\[\\]:|<>+=;,?*@&]+[^\\/\"\\[\\]:|<>+=;,?*@&.-]$"
     }
     linux_virtual_machine_scale_set = {
-      name        = substr(join("-", compact([local.prefix, "vmss", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "vmss", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "linux_virtual_machine_scale_set", { slug = "vmss", suffix = "" }).slug, local.suffix, lookup(local.overrides, "linux_virtual_machine_scale_set", { slug = "vmss", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "linux_virtual_machine_scale_set", { slug = "vmss", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "linux_virtual_machine_scale_set", { slug = "vmss", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "vmss"
       min_length  = 1
@@ -1347,8 +1348,8 @@ locals {
       regex       = "^[^\\/\"\\[\\]:|<>+=;,?*@&_][^\\/\"\\[\\]:|<>+=;,?*@&]+[^\\/\"\\[\\]:|<>+=;,?*@&.-]$"
     }
     local_network_gateway = {
-      name        = substr(join("-", compact([local.prefix, "lgw", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "lgw", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "local_network_gateway", { slug = "lgw", suffix = "" }).slug, local.suffix, lookup(local.overrides, "local_network_gateway", { slug = "lgw", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "local_network_gateway", { slug = "lgw", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "local_network_gateway", { slug = "lgw", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "lgw"
       min_length  = 1
@@ -1357,8 +1358,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     log_analytics_workspace = {
-      name        = substr(join("-", compact([local.prefix, "log", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "log", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "log_analytics_workspace", { slug = "log", suffix = "" }).slug, local.suffix, lookup(local.overrides, "log_analytics_workspace", { slug = "log", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "log_analytics_workspace", { slug = "log", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "log_analytics_workspace", { slug = "log", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "log"
       min_length  = 4
@@ -1367,8 +1368,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     logic_app_workflow = {
-      name        = substr(join("-", compact([local.prefix, "logic", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "logic", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "logic_app_workflow", { slug = "logic", suffix = "" }).slug, local.suffix, lookup(local.overrides, "logic_app_workflow", { slug = "logic", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "logic_app_workflow", { slug = "logic", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "logic_app_workflow", { slug = "logic", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "logic"
       min_length  = 1
@@ -1377,8 +1378,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     machine_learning_workspace = {
-      name        = substr(join("-", compact([local.prefix, "mlw", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "mlw", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "machine_learning_workspace", { slug = "mlw", suffix = "" }).slug, local.suffix, lookup(local.overrides, "machine_learning_workspace", { slug = "mlw", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "machine_learning_workspace", { slug = "mlw", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "machine_learning_workspace", { slug = "mlw", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "mlw"
       min_length  = 1
@@ -1387,8 +1388,8 @@ locals {
       regex       = "^[^<>*%:.?\\+\\/]+[^<>*%:.?\\+\\/ ]$"
     }
     managed_disk = {
-      name        = substr(join("-", compact([local.prefix, "dsk", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "dsk", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "managed_disk", { slug = "dsk", suffix = "" }).slug, local.suffix, lookup(local.overrides, "managed_disk", { slug = "dsk", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "managed_disk", { slug = "dsk", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "managed_disk", { slug = "dsk", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "dsk"
       min_length  = 1
@@ -1397,8 +1398,8 @@ locals {
       regex       = "^[a-zA-Z0-9_]+$"
     }
     maps_account = {
-      name        = substr(join("-", compact([local.prefix, "map", local.suffix])), 0, 98)
-      name_unique = substr(join("-", compact([local.prefix, "map", local.suffix_unique])), 0, 98)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "maps_account", { slug = "map", suffix = "" }).slug, local.suffix, lookup(local.overrides, "maps_account", { slug = "map", suffix = "" }).suffix]), ), 0, 98)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "maps_account", { slug = "map", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "maps_account", { slug = "map", suffix = "" }).suffix])), 0, 98)
       dashes      = true
       slug        = "map"
       min_length  = 1
@@ -1407,8 +1408,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+$"
     }
     mariadb_database = {
-      name        = substr(join("-", compact([local.prefix, "mariadb", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "mariadb", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "mariadb_database", { slug = "mariadb", suffix = "" }).slug, local.suffix, lookup(local.overrides, "mariadb_database", { slug = "mariadb", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "mariadb_database", { slug = "mariadb", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "mariadb_database", { slug = "mariadb", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "mariadb"
       min_length  = 1
@@ -1417,8 +1418,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     mariadb_firewall_rule = {
-      name        = substr(join("-", compact([local.prefix, "mariafw", local.suffix])), 0, 128)
-      name_unique = substr(join("-", compact([local.prefix, "mariafw", local.suffix_unique])), 0, 128)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "mariadb_firewall_rule", { slug = "mariafw", suffix = "" }).slug, local.suffix, lookup(local.overrides, "mariadb_firewall_rule", { slug = "mariafw", suffix = "" }).suffix]), ), 0, 128)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "mariadb_firewall_rule", { slug = "mariafw", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "mariadb_firewall_rule", { slug = "mariafw", suffix = "" }).suffix])), 0, 128)
       dashes      = true
       slug        = "mariafw"
       min_length  = 1
@@ -1427,8 +1428,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     mariadb_server = {
-      name        = substr(join("-", compact([local.prefix, "maria", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "maria", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "mariadb_server", { slug = "maria", suffix = "" }).slug, local.suffix, lookup(local.overrides, "mariadb_server", { slug = "maria", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "mariadb_server", { slug = "maria", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "mariadb_server", { slug = "maria", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "maria"
       min_length  = 3
@@ -1437,8 +1438,8 @@ locals {
       regex       = "^[a-z0-9][a-zA-Z0-9-]+[a-z0-9]$"
     }
     mariadb_virtual_network_rule = {
-      name        = substr(join("-", compact([local.prefix, "mariavn", local.suffix])), 0, 128)
-      name_unique = substr(join("-", compact([local.prefix, "mariavn", local.suffix_unique])), 0, 128)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "mariadb_virtual_network_rule", { slug = "mariavn", suffix = "" }).slug, local.suffix, lookup(local.overrides, "mariadb_virtual_network_rule", { slug = "mariavn", suffix = "" }).suffix]), ), 0, 128)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "mariadb_virtual_network_rule", { slug = "mariavn", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "mariadb_virtual_network_rule", { slug = "mariavn", suffix = "" }).suffix])), 0, 128)
       dashes      = true
       slug        = "mariavn"
       min_length  = 1
@@ -1447,8 +1448,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     monitor_action_group = {
-      name        = substr(join("-", compact([local.prefix, "mag", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "mag", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "monitor_action_group", { slug = "mag", suffix = "" }).slug, local.suffix, lookup(local.overrides, "monitor_action_group", { slug = "mag", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "monitor_action_group", { slug = "mag", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "monitor_action_group", { slug = "mag", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "mag"
       min_length  = 1
@@ -1457,8 +1458,8 @@ locals {
       regex       = "^[^%&?\\+\\/]+[^^%&?\\+\\/ ]$"
     }
     monitor_autoscale_setting = {
-      name        = substr(join("-", compact([local.prefix, "mas", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "mas", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "monitor_autoscale_setting", { slug = "mas", suffix = "" }).slug, local.suffix, lookup(local.overrides, "monitor_autoscale_setting", { slug = "mas", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "monitor_autoscale_setting", { slug = "mas", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "monitor_autoscale_setting", { slug = "mas", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "mas"
       min_length  = 1
@@ -1467,8 +1468,8 @@ locals {
       regex       = "^[^<>%&#.,?\\+\\/]+[^<>%&#.,?\\+\\/ ]$"
     }
     monitor_diagnostic_setting = {
-      name        = substr(join("-", compact([local.prefix, "mds", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "mds", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "monitor_diagnostic_setting", { slug = "mds", suffix = "" }).slug, local.suffix, lookup(local.overrides, "monitor_diagnostic_setting", { slug = "mds", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "monitor_diagnostic_setting", { slug = "mds", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "monitor_diagnostic_setting", { slug = "mds", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "mds"
       min_length  = 1
@@ -1477,8 +1478,8 @@ locals {
       regex       = "^[^*<>%:&?\\+\\/]+[^*<>%:&?\\+\\/ ]$"
     }
     monitor_scheduled_query_rules_alert = {
-      name        = substr(join("-", compact([local.prefix, "msqa", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "msqa", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "monitor_scheduled_query_rules_alert", { slug = "msqa", suffix = "" }).slug, local.suffix, lookup(local.overrides, "monitor_scheduled_query_rules_alert", { slug = "msqa", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "monitor_scheduled_query_rules_alert", { slug = "msqa", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "monitor_scheduled_query_rules_alert", { slug = "msqa", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "msqa"
       min_length  = 1
@@ -1487,8 +1488,8 @@ locals {
       regex       = "^[^*<>%:{}&#.,?\\+\\/]+[^*<>%:{}&#.,?\\+\\/ ]$"
     }
     mssql_database = {
-      name        = substr(join("-", compact([local.prefix, "sqldb", local.suffix])), 0, 128)
-      name_unique = substr(join("-", compact([local.prefix, "sqldb", local.suffix_unique])), 0, 128)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "mssql_database", { slug = "sqldb", suffix = "" }).slug, local.suffix, lookup(local.overrides, "mssql_database", { slug = "sqldb", suffix = "" }).suffix]), ), 0, 128)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "mssql_database", { slug = "sqldb", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "mssql_database", { slug = "sqldb", suffix = "" }).suffix])), 0, 128)
       dashes      = true
       slug        = "sqldb"
       min_length  = 1
@@ -1497,8 +1498,8 @@ locals {
       regex       = "^[^<>*%:.?\\+\\/]+[^<>*%:.?\\+\\/ ]$"
     }
     mssql_elasticpool = {
-      name        = substr(join("-", compact([local.prefix, "sqlep", local.suffix])), 0, 128)
-      name_unique = substr(join("-", compact([local.prefix, "sqlep", local.suffix_unique])), 0, 128)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "mssql_elasticpool", { slug = "sqlep", suffix = "" }).slug, local.suffix, lookup(local.overrides, "mssql_elasticpool", { slug = "sqlep", suffix = "" }).suffix]), ), 0, 128)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "mssql_elasticpool", { slug = "sqlep", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "mssql_elasticpool", { slug = "sqlep", suffix = "" }).suffix])), 0, 128)
       dashes      = true
       slug        = "sqlep"
       min_length  = 1
@@ -1507,8 +1508,8 @@ locals {
       regex       = "^[^<>*%:.?\\+\\/]+[^<>*%:.?\\+\\/ ]$"
     }
     mssql_server = {
-      name        = substr(join("-", compact([local.prefix, "sql", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "sql", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "mssql_server", { slug = "sql", suffix = "" }).slug, local.suffix, lookup(local.overrides, "mssql_server", { slug = "sql", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "mssql_server", { slug = "sql", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "mssql_server", { slug = "sql", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "sql"
       min_length  = 1
@@ -1517,8 +1518,8 @@ locals {
       regex       = "^[a-z0-9][a-z0-9-]+[a-z0-9]$"
     }
     mysql_database = {
-      name        = substr(join("-", compact([local.prefix, "mysqldb", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "mysqldb", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "mysql_database", { slug = "mysqldb", suffix = "" }).slug, local.suffix, lookup(local.overrides, "mysql_database", { slug = "mysqldb", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "mysql_database", { slug = "mysqldb", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "mysql_database", { slug = "mysqldb", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "mysqldb"
       min_length  = 1
@@ -1527,8 +1528,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     mysql_firewall_rule = {
-      name        = substr(join("-", compact([local.prefix, "mysqlfw", local.suffix])), 0, 128)
-      name_unique = substr(join("-", compact([local.prefix, "mysqlfw", local.suffix_unique])), 0, 128)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "mysql_firewall_rule", { slug = "mysqlfw", suffix = "" }).slug, local.suffix, lookup(local.overrides, "mysql_firewall_rule", { slug = "mysqlfw", suffix = "" }).suffix]), ), 0, 128)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "mysql_firewall_rule", { slug = "mysqlfw", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "mysql_firewall_rule", { slug = "mysqlfw", suffix = "" }).suffix])), 0, 128)
       dashes      = true
       slug        = "mysqlfw"
       min_length  = 1
@@ -1537,8 +1538,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     mysql_server = {
-      name        = substr(join("-", compact([local.prefix, "mysql", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "mysql", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "mysql_server", { slug = "mysql", suffix = "" }).slug, local.suffix, lookup(local.overrides, "mysql_server", { slug = "mysql", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "mysql_server", { slug = "mysql", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "mysql_server", { slug = "mysql", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "mysql"
       min_length  = 3
@@ -1547,8 +1548,8 @@ locals {
       regex       = "^[a-z0-9][a-zA-Z0-9-]+[a-z0-9]$"
     }
     mysql_virtual_network_rule = {
-      name        = substr(join("-", compact([local.prefix, "mysqlvn", local.suffix])), 0, 128)
-      name_unique = substr(join("-", compact([local.prefix, "mysqlvn", local.suffix_unique])), 0, 128)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "mysql_virtual_network_rule", { slug = "mysqlvn", suffix = "" }).slug, local.suffix, lookup(local.overrides, "mysql_virtual_network_rule", { slug = "mysqlvn", suffix = "" }).suffix]), ), 0, 128)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "mysql_virtual_network_rule", { slug = "mysqlvn", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "mysql_virtual_network_rule", { slug = "mysqlvn", suffix = "" }).suffix])), 0, 128)
       dashes      = true
       slug        = "mysqlvn"
       min_length  = 1
@@ -1557,8 +1558,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     network_ddos_protection_plan = {
-      name        = substr(join("-", compact([local.prefix, "ddospp", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "ddospp", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "network_ddos_protection_plan", { slug = "ddospp", suffix = "" }).slug, local.suffix, lookup(local.overrides, "network_ddos_protection_plan", { slug = "ddospp", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "network_ddos_protection_plan", { slug = "ddospp", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "network_ddos_protection_plan", { slug = "ddospp", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "ddospp"
       min_length  = 1
@@ -1567,8 +1568,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     network_interface = {
-      name        = substr(join("-", compact([local.prefix, "nic", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "nic", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "network_interface", { slug = "nic", suffix = "" }).slug, local.suffix, lookup(local.overrides, "network_interface", { slug = "nic", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "network_interface", { slug = "nic", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "network_interface", { slug = "nic", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "nic"
       min_length  = 1
@@ -1577,8 +1578,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     network_security_group = {
-      name        = substr(join("-", compact([local.prefix, "nsg", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "nsg", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "network_security_group", { slug = "nsg", suffix = "" }).slug, local.suffix, lookup(local.overrides, "network_security_group", { slug = "nsg", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "network_security_group", { slug = "nsg", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "network_security_group", { slug = "nsg", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "nsg"
       min_length  = 1
@@ -1587,8 +1588,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     network_security_group_rule = {
-      name        = substr(join("-", compact([local.prefix, "nsgr", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "nsgr", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "network_security_group_rule", { slug = "nsgr", suffix = "" }).slug, local.suffix, lookup(local.overrides, "network_security_group_rule", { slug = "nsgr", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "network_security_group_rule", { slug = "nsgr", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "network_security_group_rule", { slug = "nsgr", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "nsgr"
       min_length  = 1
@@ -1597,8 +1598,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     network_security_rule = {
-      name        = substr(join("-", compact([local.prefix, "nsgr", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "nsgr", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "network_security_rule", { slug = "nsgr", suffix = "" }).slug, local.suffix, lookup(local.overrides, "network_security_rule", { slug = "nsgr", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "network_security_rule", { slug = "nsgr", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "network_security_rule", { slug = "nsgr", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "nsgr"
       min_length  = 1
@@ -1607,8 +1608,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     network_watcher = {
-      name        = substr(join("-", compact([local.prefix, "nw", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "nw", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "network_watcher", { slug = "nw", suffix = "" }).slug, local.suffix, lookup(local.overrides, "network_watcher", { slug = "nw", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "network_watcher", { slug = "nw", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "network_watcher", { slug = "nw", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "nw"
       min_length  = 1
@@ -1617,8 +1618,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     notification_hub = {
-      name        = substr(join("-", compact([local.prefix, "nh", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "nh", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "notification_hub", { slug = "nh", suffix = "" }).slug, local.suffix, lookup(local.overrides, "notification_hub", { slug = "nh", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "notification_hub", { slug = "nh", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "notification_hub", { slug = "nh", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "nh"
       min_length  = 1
@@ -1627,8 +1628,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+$"
     }
     notification_hub_authorization_rule = {
-      name        = substr(join("-", compact([local.prefix, "dnsrec", local.suffix])), 0, 256)
-      name_unique = substr(join("-", compact([local.prefix, "dnsrec", local.suffix_unique])), 0, 256)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "notification_hub_authorization_rule", { slug = "dnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "notification_hub_authorization_rule", { slug = "dnsrec", suffix = "" }).suffix]), ), 0, 256)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "notification_hub_authorization_rule", { slug = "dnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "notification_hub_authorization_rule", { slug = "dnsrec", suffix = "" }).suffix])), 0, 256)
       dashes      = true
       slug        = "dnsrec"
       min_length  = 1
@@ -1637,8 +1638,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+$"
     }
     notification_hub_namespace = {
-      name        = substr(join("-", compact([local.prefix, "dnsrec", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "dnsrec", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "notification_hub_namespace", { slug = "dnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "notification_hub_namespace", { slug = "dnsrec", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "notification_hub_namespace", { slug = "dnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "notification_hub_namespace", { slug = "dnsrec", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "dnsrec"
       min_length  = 6
@@ -1647,8 +1648,8 @@ locals {
       regex       = "^[a-zA-Z][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     point_to_site_vpn_gateway = {
-      name        = substr(join("-", compact([local.prefix, "vpngw", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "vpngw", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "point_to_site_vpn_gateway", { slug = "vpngw", suffix = "" }).slug, local.suffix, lookup(local.overrides, "point_to_site_vpn_gateway", { slug = "vpngw", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "point_to_site_vpn_gateway", { slug = "vpngw", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "point_to_site_vpn_gateway", { slug = "vpngw", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "vpngw"
       min_length  = 1
@@ -1657,8 +1658,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     postgresql_database = {
-      name        = substr(join("-", compact([local.prefix, "psqldb", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "psqldb", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "postgresql_database", { slug = "psqldb", suffix = "" }).slug, local.suffix, lookup(local.overrides, "postgresql_database", { slug = "psqldb", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "postgresql_database", { slug = "psqldb", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "postgresql_database", { slug = "psqldb", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "psqldb"
       min_length  = 1
@@ -1667,8 +1668,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     postgresql_firewall_rule = {
-      name        = substr(join("-", compact([local.prefix, "psqlfw", local.suffix])), 0, 128)
-      name_unique = substr(join("-", compact([local.prefix, "psqlfw", local.suffix_unique])), 0, 128)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "postgresql_firewall_rule", { slug = "psqlfw", suffix = "" }).slug, local.suffix, lookup(local.overrides, "postgresql_firewall_rule", { slug = "psqlfw", suffix = "" }).suffix]), ), 0, 128)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "postgresql_firewall_rule", { slug = "psqlfw", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "postgresql_firewall_rule", { slug = "psqlfw", suffix = "" }).suffix])), 0, 128)
       dashes      = true
       slug        = "psqlfw"
       min_length  = 1
@@ -1677,8 +1678,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     postgresql_server = {
-      name        = substr(join("-", compact([local.prefix, "psql", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "psql", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "postgresql_server", { slug = "psql", suffix = "" }).slug, local.suffix, lookup(local.overrides, "postgresql_server", { slug = "psql", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "postgresql_server", { slug = "psql", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "postgresql_server", { slug = "psql", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "psql"
       min_length  = 3
@@ -1687,8 +1688,8 @@ locals {
       regex       = "^[a-z0-9][a-zA-Z0-9-]+[a-z0-9]$"
     }
     postgresql_virtual_network_rule = {
-      name        = substr(join("-", compact([local.prefix, "psqlvn", local.suffix])), 0, 128)
-      name_unique = substr(join("-", compact([local.prefix, "psqlvn", local.suffix_unique])), 0, 128)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "postgresql_virtual_network_rule", { slug = "psqlvn", suffix = "" }).slug, local.suffix, lookup(local.overrides, "postgresql_virtual_network_rule", { slug = "psqlvn", suffix = "" }).suffix]), ), 0, 128)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "postgresql_virtual_network_rule", { slug = "psqlvn", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "postgresql_virtual_network_rule", { slug = "psqlvn", suffix = "" }).suffix])), 0, 128)
       dashes      = true
       slug        = "psqlvn"
       min_length  = 1
@@ -1697,8 +1698,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     powerbi_embedded = {
-      name        = substr(join("-", compact([local.prefix, "pbi", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "pbi", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "powerbi_embedded", { slug = "pbi", suffix = "" }).slug, local.suffix, lookup(local.overrides, "powerbi_embedded", { slug = "pbi", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "powerbi_embedded", { slug = "pbi", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "powerbi_embedded", { slug = "pbi", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "pbi"
       min_length  = 3
@@ -1707,8 +1708,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+$"
     }
     private_dns_a_record = {
-      name        = substr(join("-", compact([local.prefix, "pdnsrec", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "pdnsrec", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_a_record", { slug = "pdnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "private_dns_a_record", { slug = "pdnsrec", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_a_record", { slug = "pdnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "private_dns_a_record", { slug = "pdnsrec", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "pdnsrec"
       min_length  = 1
@@ -1717,8 +1718,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     private_dns_aaaa_record = {
-      name        = substr(join("-", compact([local.prefix, "pdnsrec", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "pdnsrec", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_aaaa_record", { slug = "pdnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "private_dns_aaaa_record", { slug = "pdnsrec", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_aaaa_record", { slug = "pdnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "private_dns_aaaa_record", { slug = "pdnsrec", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "pdnsrec"
       min_length  = 1
@@ -1727,8 +1728,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     private_dns_cname_record = {
-      name        = substr(join("-", compact([local.prefix, "pdnsrec", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "pdnsrec", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_cname_record", { slug = "pdnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "private_dns_cname_record", { slug = "pdnsrec", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_cname_record", { slug = "pdnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "private_dns_cname_record", { slug = "pdnsrec", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "pdnsrec"
       min_length  = 1
@@ -1737,8 +1738,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     private_dns_mx_record = {
-      name        = substr(join("-", compact([local.prefix, "pdnsrec", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "pdnsrec", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_mx_record", { slug = "pdnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "private_dns_mx_record", { slug = "pdnsrec", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_mx_record", { slug = "pdnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "private_dns_mx_record", { slug = "pdnsrec", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "pdnsrec"
       min_length  = 1
@@ -1747,8 +1748,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     private_dns_ptr_record = {
-      name        = substr(join("-", compact([local.prefix, "pdnsrec", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "pdnsrec", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_ptr_record", { slug = "pdnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "private_dns_ptr_record", { slug = "pdnsrec", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_ptr_record", { slug = "pdnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "private_dns_ptr_record", { slug = "pdnsrec", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "pdnsrec"
       min_length  = 1
@@ -1757,8 +1758,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     private_dns_srv_record = {
-      name        = substr(join("-", compact([local.prefix, "pdnsrec", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "pdnsrec", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_srv_record", { slug = "pdnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "private_dns_srv_record", { slug = "pdnsrec", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_srv_record", { slug = "pdnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "private_dns_srv_record", { slug = "pdnsrec", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "pdnsrec"
       min_length  = 1
@@ -1767,8 +1768,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     private_dns_txt_record = {
-      name        = substr(join("-", compact([local.prefix, "pdnsrec", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "pdnsrec", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_txt_record", { slug = "pdnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "private_dns_txt_record", { slug = "pdnsrec", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_txt_record", { slug = "pdnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "private_dns_txt_record", { slug = "pdnsrec", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "pdnsrec"
       min_length  = 1
@@ -1777,8 +1778,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     private_dns_zone = {
-      name        = substr(join("-", compact([local.prefix, "pdns", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "pdns", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_zone", { slug = "pdns", suffix = "" }).slug, local.suffix, lookup(local.overrides, "private_dns_zone", { slug = "pdns", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_zone", { slug = "pdns", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "private_dns_zone", { slug = "pdns", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "pdns"
       min_length  = 1
@@ -1787,8 +1788,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     private_dns_zone_group = {
-      name        = substr(join("-", compact([local.prefix, "pdnszg", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "pdnszg", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_zone_group", { slug = "pdnszg", suffix = "" }).slug, local.suffix, lookup(local.overrides, "private_dns_zone_group", { slug = "pdnszg", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_dns_zone_group", { slug = "pdnszg", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "private_dns_zone_group", { slug = "pdnszg", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "pdnszg"
       min_length  = 1
@@ -1797,8 +1798,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9\\-\\._]+[a-zA-Z0-9_]$"
     }
     private_endpoint = {
-      name        = substr(join("-", compact([local.prefix, "pe", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "pe", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_endpoint", { slug = "pe", suffix = "" }).slug, local.suffix, lookup(local.overrides, "private_endpoint", { slug = "pe", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_endpoint", { slug = "pe", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "private_endpoint", { slug = "pe", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "pe"
       min_length  = 1
@@ -1807,8 +1808,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9\\-\\._]+[a-zA-Z0-9_]$"
     }
     private_link_service = {
-      name        = substr(join("-", compact([local.prefix, "pls", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "pls", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_link_service", { slug = "pls", suffix = "" }).slug, local.suffix, lookup(local.overrides, "private_link_service", { slug = "pls", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_link_service", { slug = "pls", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "private_link_service", { slug = "pls", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "pls"
       min_length  = 1
@@ -1817,8 +1818,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     private_service_connection = {
-      name        = substr(join("-", compact([local.prefix, "psc", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "psc", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_service_connection", { slug = "psc", suffix = "" }).slug, local.suffix, lookup(local.overrides, "private_service_connection", { slug = "psc", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "private_service_connection", { slug = "psc", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "private_service_connection", { slug = "psc", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "psc"
       min_length  = 1
@@ -1827,8 +1828,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9\\-\\._]+[a-zA-Z0-9_]$"
     }
     proximity_placement_group = {
-      name        = substr(join("-", compact([local.prefix, "ppg", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "ppg", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "proximity_placement_group", { slug = "ppg", suffix = "" }).slug, local.suffix, lookup(local.overrides, "proximity_placement_group", { slug = "ppg", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "proximity_placement_group", { slug = "ppg", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "proximity_placement_group", { slug = "ppg", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "ppg"
       min_length  = 1
@@ -1837,8 +1838,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     public_ip = {
-      name        = substr(join("-", compact([local.prefix, "pip", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "pip", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "public_ip", { slug = "pip", suffix = "" }).slug, local.suffix, lookup(local.overrides, "public_ip", { slug = "pip", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "public_ip", { slug = "pip", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "public_ip", { slug = "pip", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "pip"
       min_length  = 1
@@ -1847,8 +1848,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     public_ip_prefix = {
-      name        = substr(join("-", compact([local.prefix, "pippf", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "pippf", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "public_ip_prefix", { slug = "pippf", suffix = "" }).slug, local.suffix, lookup(local.overrides, "public_ip_prefix", { slug = "pippf", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "public_ip_prefix", { slug = "pippf", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "public_ip_prefix", { slug = "pippf", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "pippf"
       min_length  = 1
@@ -1857,8 +1858,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     recovery_services_vault = {
-      name        = substr(join("-", compact([local.prefix, "rsv", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "rsv", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "recovery_services_vault", { slug = "rsv", suffix = "" }).slug, local.suffix, lookup(local.overrides, "recovery_services_vault", { slug = "rsv", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "recovery_services_vault", { slug = "rsv", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "recovery_services_vault", { slug = "rsv", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "rsv"
       min_length  = 2
@@ -1867,8 +1868,8 @@ locals {
       regex       = "^[a-zA-Z][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     redis_cache = {
-      name        = substr(join("-", compact([local.prefix, "redis", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "redis", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "redis_cache", { slug = "redis", suffix = "" }).slug, local.suffix, lookup(local.overrides, "redis_cache", { slug = "redis", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "redis_cache", { slug = "redis", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "redis_cache", { slug = "redis", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "redis"
       min_length  = 1
@@ -1877,8 +1878,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     redis_firewall_rule = {
-      name        = substr(join("", compact([local.prefix_safe, "redisfw", local.suffix_safe])), 0, 256)
-      name_unique = substr(join("", compact([local.prefix_safe, "redisfw", local.suffix_unique_safe])), 0, 256)
+      name = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "redis_firewall_rule", { slug = "redisfw", suffix = "" }).slug, local.suffix_safe, lookup(local.overrides, "redis_firewall_rule", { slug = "redisfw", suffix = "" }).suffix]), ), 0, 256)
+      name_unique = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "redis_firewall_rule", { slug = "redisfw", suffix = "" }).slug, local.suffix_unique_safe, lookup(local.overrides, "redis_firewall_rule", { slug = "redisfw", suffix = "" }).suffix])), 0, 256)
       dashes      = false
       slug        = "redisfw"
       min_length  = 1
@@ -1887,8 +1888,8 @@ locals {
       regex       = "^[a-zA-Z0-9]+$"
     }
     relay_hybrid_connection = {
-      name        = substr(join("-", compact([local.prefix, "rlhc", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "rlhc", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "relay_hybrid_connection", { slug = "rlhc", suffix = "" }).slug, local.suffix, lookup(local.overrides, "relay_hybrid_connection", { slug = "rlhc", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "relay_hybrid_connection", { slug = "rlhc", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "relay_hybrid_connection", { slug = "rlhc", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "rlhc"
       min_length  = 1
@@ -1897,8 +1898,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9]$"
     }
     relay_namespace = {
-      name        = substr(join("-", compact([local.prefix, "rln", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "rln", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "relay_namespace", { slug = "rln", suffix = "" }).slug, local.suffix, lookup(local.overrides, "relay_namespace", { slug = "rln", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "relay_namespace", { slug = "rln", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "relay_namespace", { slug = "rln", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "rln"
       min_length  = 6
@@ -1907,8 +1908,8 @@ locals {
       regex       = "^[a-zA-Z][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     resource_group = {
-      name        = substr(join("-", compact([local.prefix, "rg", local.suffix])), 0, 90)
-      name_unique = substr(join("-", compact([local.prefix, "rg", local.suffix_unique])), 0, 90)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "resource_group", { slug = "rg", suffix = "" }).slug, local.suffix, lookup(local.overrides, "resource_group", { slug = "rg", suffix = "" }).suffix]), ), 0, 90)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "resource_group", { slug = "rg", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "resource_group", { slug = "rg", suffix = "" }).suffix])), 0, 90)
       dashes      = true
       slug        = "rg"
       min_length  = 1
@@ -1917,8 +1918,8 @@ locals {
       regex       = "^[a-zA-Z0-9-._\\(\\)]+[a-zA-Z0-9-_\\(\\)]$"
     }
     role_assignment = {
-      name        = substr(join("-", compact([local.prefix, "ra", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "ra", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "role_assignment", { slug = "ra", suffix = "" }).slug, local.suffix, lookup(local.overrides, "role_assignment", { slug = "ra", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "role_assignment", { slug = "ra", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "role_assignment", { slug = "ra", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "ra"
       min_length  = 1
@@ -1927,8 +1928,8 @@ locals {
       regex       = "^[^%]+[^ %.]$"
     }
     role_definition = {
-      name        = substr(join("-", compact([local.prefix, "rd", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "rd", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "role_definition", { slug = "rd", suffix = "" }).slug, local.suffix, lookup(local.overrides, "role_definition", { slug = "rd", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "role_definition", { slug = "rd", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "role_definition", { slug = "rd", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "rd"
       min_length  = 1
@@ -1937,8 +1938,8 @@ locals {
       regex       = "^[^%]+[^ %.]$"
     }
     route = {
-      name        = substr(join("-", compact([local.prefix, "rt", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "rt", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "route", { slug = "rt", suffix = "" }).slug, local.suffix, lookup(local.overrides, "route", { slug = "rt", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "route", { slug = "rt", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "route", { slug = "rt", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "rt"
       min_length  = 1
@@ -1947,8 +1948,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     route_table = {
-      name        = substr(join("-", compact([local.prefix, "route", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "route", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "route_table", { slug = "route", suffix = "" }).slug, local.suffix, lookup(local.overrides, "route_table", { slug = "route", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "route_table", { slug = "route", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "route_table", { slug = "route", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "route"
       min_length  = 1
@@ -1957,8 +1958,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     search_service = {
-      name        = substr(join("-", compact([local.prefix, "srch", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "srch", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "search_service", { slug = "srch", suffix = "" }).slug, local.suffix, lookup(local.overrides, "search_service", { slug = "srch", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "search_service", { slug = "srch", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "search_service", { slug = "srch", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "srch"
       min_length  = 2
@@ -1967,8 +1968,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+$"
     }
     service_fabric_cluster = {
-      name        = substr(join("-", compact([local.prefix, "sf", local.suffix])), 0, 23)
-      name_unique = substr(join("-", compact([local.prefix, "sf", local.suffix_unique])), 0, 23)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "service_fabric_cluster", { slug = "sf", suffix = "" }).slug, local.suffix, lookup(local.overrides, "service_fabric_cluster", { slug = "sf", suffix = "" }).suffix]), ), 0, 23)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "service_fabric_cluster", { slug = "sf", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "service_fabric_cluster", { slug = "sf", suffix = "" }).suffix])), 0, 23)
       dashes      = true
       slug        = "sf"
       min_length  = 4
@@ -1977,8 +1978,8 @@ locals {
       regex       = "^[a-z][a-z0-9-]+[a-z0-9]$"
     }
     servicebus_namespace = {
-      name        = substr(join("-", compact([local.prefix, "sb", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "sb", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "servicebus_namespace", { slug = "sb", suffix = "" }).slug, local.suffix, lookup(local.overrides, "servicebus_namespace", { slug = "sb", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "servicebus_namespace", { slug = "sb", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "servicebus_namespace", { slug = "sb", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "sb"
       min_length  = 6
@@ -1987,8 +1988,8 @@ locals {
       regex       = "^[a-zA-Z][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     servicebus_namespace_authorization_rule = {
-      name        = substr(join("-", compact([local.prefix, "sbar", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "sbar", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "servicebus_namespace_authorization_rule", { slug = "sbar", suffix = "" }).slug, local.suffix, lookup(local.overrides, "servicebus_namespace_authorization_rule", { slug = "sbar", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "servicebus_namespace_authorization_rule", { slug = "sbar", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "servicebus_namespace_authorization_rule", { slug = "sbar", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "sbar"
       min_length  = 1
@@ -1997,8 +1998,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9]$"
     }
     servicebus_queue = {
-      name        = substr(join("-", compact([local.prefix, "sbq", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "sbq", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "servicebus_queue", { slug = "sbq", suffix = "" }).slug, local.suffix, lookup(local.overrides, "servicebus_queue", { slug = "sbq", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "servicebus_queue", { slug = "sbq", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "servicebus_queue", { slug = "sbq", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "sbq"
       min_length  = 1
@@ -2007,8 +2008,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     servicebus_queue_authorization_rule = {
-      name        = substr(join("-", compact([local.prefix, "sbqar", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "sbqar", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "servicebus_queue_authorization_rule", { slug = "sbqar", suffix = "" }).slug, local.suffix, lookup(local.overrides, "servicebus_queue_authorization_rule", { slug = "sbqar", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "servicebus_queue_authorization_rule", { slug = "sbqar", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "servicebus_queue_authorization_rule", { slug = "sbqar", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "sbqar"
       min_length  = 1
@@ -2017,8 +2018,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9]$"
     }
     servicebus_subscription = {
-      name        = substr(join("-", compact([local.prefix, "sbs", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "sbs", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "servicebus_subscription", { slug = "sbs", suffix = "" }).slug, local.suffix, lookup(local.overrides, "servicebus_subscription", { slug = "sbs", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "servicebus_subscription", { slug = "sbs", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "servicebus_subscription", { slug = "sbs", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "sbs"
       min_length  = 1
@@ -2027,8 +2028,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9]$"
     }
     servicebus_subscription_rule = {
-      name        = substr(join("-", compact([local.prefix, "sbsr", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "sbsr", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "servicebus_subscription_rule", { slug = "sbsr", suffix = "" }).slug, local.suffix, lookup(local.overrides, "servicebus_subscription_rule", { slug = "sbsr", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "servicebus_subscription_rule", { slug = "sbsr", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "servicebus_subscription_rule", { slug = "sbsr", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "sbsr"
       min_length  = 1
@@ -2037,8 +2038,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9]$"
     }
     servicebus_topic = {
-      name        = substr(join("-", compact([local.prefix, "sbt", local.suffix])), 0, 260)
-      name_unique = substr(join("-", compact([local.prefix, "sbt", local.suffix_unique])), 0, 260)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "servicebus_topic", { slug = "sbt", suffix = "" }).slug, local.suffix, lookup(local.overrides, "servicebus_topic", { slug = "sbt", suffix = "" }).suffix]), ), 0, 260)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "servicebus_topic", { slug = "sbt", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "servicebus_topic", { slug = "sbt", suffix = "" }).suffix])), 0, 260)
       dashes      = true
       slug        = "sbt"
       min_length  = 1
@@ -2047,8 +2048,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9]$"
     }
     servicebus_topic_authorization_rule = {
-      name        = substr(join("-", compact([local.prefix, "dnsrec", local.suffix])), 0, 50)
-      name_unique = substr(join("-", compact([local.prefix, "dnsrec", local.suffix_unique])), 0, 50)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "servicebus_topic_authorization_rule", { slug = "dnsrec", suffix = "" }).slug, local.suffix, lookup(local.overrides, "servicebus_topic_authorization_rule", { slug = "dnsrec", suffix = "" }).suffix]), ), 0, 50)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "servicebus_topic_authorization_rule", { slug = "dnsrec", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "servicebus_topic_authorization_rule", { slug = "dnsrec", suffix = "" }).suffix])), 0, 50)
       dashes      = true
       slug        = "dnsrec"
       min_length  = 1
@@ -2057,8 +2058,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9]$"
     }
     shared_image = {
-      name        = substr(join("-", compact([local.prefix, "si", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "si", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "shared_image", { slug = "si", suffix = "" }).slug, local.suffix, lookup(local.overrides, "shared_image", { slug = "si", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "shared_image", { slug = "si", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "shared_image", { slug = "si", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "si"
       min_length  = 1
@@ -2067,8 +2068,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9]$"
     }
     shared_image_gallery = {
-      name        = substr(join("", compact([local.prefix_safe, "sig", local.suffix_safe])), 0, 80)
-      name_unique = substr(join("", compact([local.prefix_safe, "sig", local.suffix_unique_safe])), 0, 80)
+      name = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "shared_image_gallery", { slug = "sig", suffix = "" }).slug, local.suffix_safe, lookup(local.overrides, "shared_image_gallery", { slug = "sig", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "shared_image_gallery", { slug = "sig", suffix = "" }).slug, local.suffix_unique_safe, lookup(local.overrides, "shared_image_gallery", { slug = "sig", suffix = "" }).suffix])), 0, 80)
       dashes      = false
       slug        = "sig"
       min_length  = 1
@@ -2077,8 +2078,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9.]+[a-zA-Z0-9]$"
     }
     signalr_service = {
-      name        = substr(join("-", compact([local.prefix, "sgnlr", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "sgnlr", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "signalr_service", { slug = "sgnlr", suffix = "" }).slug, local.suffix, lookup(local.overrides, "signalr_service", { slug = "sgnlr", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "signalr_service", { slug = "sgnlr", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "signalr_service", { slug = "sgnlr", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "sgnlr"
       min_length  = 3
@@ -2087,8 +2088,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]$"
     }
     snapshots = {
-      name        = substr(join("-", compact([local.prefix, "snap", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "snap", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "snapshots", { slug = "snap", suffix = "" }).slug, local.suffix, lookup(local.overrides, "snapshots", { slug = "snap", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "snapshots", { slug = "snap", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "snapshots", { slug = "snap", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "snap"
       min_length  = 1
@@ -2097,8 +2098,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     sql_elasticpool = {
-      name        = substr(join("-", compact([local.prefix, "sqlep", local.suffix])), 0, 128)
-      name_unique = substr(join("-", compact([local.prefix, "sqlep", local.suffix_unique])), 0, 128)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "sql_elasticpool", { slug = "sqlep", suffix = "" }).slug, local.suffix, lookup(local.overrides, "sql_elasticpool", { slug = "sqlep", suffix = "" }).suffix]), ), 0, 128)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "sql_elasticpool", { slug = "sqlep", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "sql_elasticpool", { slug = "sqlep", suffix = "" }).suffix])), 0, 128)
       dashes      = true
       slug        = "sqlep"
       min_length  = 1
@@ -2107,8 +2108,8 @@ locals {
       regex       = "^[^<>*%:.?\\+\\/]+[^<>*%:.?\\+\\/ ]$"
     }
     sql_failover_group = {
-      name        = substr(join("-", compact([local.prefix, "sqlfg", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "sqlfg", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "sql_failover_group", { slug = "sqlfg", suffix = "" }).slug, local.suffix, lookup(local.overrides, "sql_failover_group", { slug = "sqlfg", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "sql_failover_group", { slug = "sqlfg", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "sql_failover_group", { slug = "sqlfg", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "sqlfg"
       min_length  = 1
@@ -2117,8 +2118,8 @@ locals {
       regex       = "^[a-z0-9][a-z0-9-]+[a-z0-9]$"
     }
     sql_firewall_rule = {
-      name        = substr(join("-", compact([local.prefix, "sqlfw", local.suffix])), 0, 128)
-      name_unique = substr(join("-", compact([local.prefix, "sqlfw", local.suffix_unique])), 0, 128)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "sql_firewall_rule", { slug = "sqlfw", suffix = "" }).slug, local.suffix, lookup(local.overrides, "sql_firewall_rule", { slug = "sqlfw", suffix = "" }).suffix]), ), 0, 128)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "sql_firewall_rule", { slug = "sqlfw", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "sql_firewall_rule", { slug = "sqlfw", suffix = "" }).suffix])), 0, 128)
       dashes      = true
       slug        = "sqlfw"
       min_length  = 1
@@ -2127,8 +2128,8 @@ locals {
       regex       = "^[^<>*%:?\\+\\/]+[^<>*%:.?\\+\\/]$"
     }
     sql_server = {
-      name        = substr(join("-", compact([local.prefix, "sql", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "sql", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "sql_server", { slug = "sql", suffix = "" }).slug, local.suffix, lookup(local.overrides, "sql_server", { slug = "sql", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "sql_server", { slug = "sql", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "sql_server", { slug = "sql", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "sql"
       min_length  = 1
@@ -2137,8 +2138,8 @@ locals {
       regex       = "^[a-z0-9][a-z0-9-]+[a-z0-9]$"
     }
     storage_account = {
-      name        = substr(join("", compact([local.prefix_safe, "st", local.suffix_safe])), 0, 24)
-      name_unique = substr(join("", compact([local.prefix_safe, "st", local.suffix_unique_safe])), 0, 24)
+      name = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "storage_account", { slug = "st", suffix = "" }).slug, local.suffix_safe, lookup(local.overrides, "storage_account", { slug = "st", suffix = "" }).suffix]), ), 0, 24)
+      name_unique = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "storage_account", { slug = "st", suffix = "" }).slug, local.suffix_unique_safe, lookup(local.overrides, "storage_account", { slug = "st", suffix = "" }).suffix])), 0, 24)
       dashes      = false
       slug        = "st"
       min_length  = 3
@@ -2147,8 +2148,8 @@ locals {
       regex       = "^[a-z0-9]+$"
     }
     storage_blob = {
-      name        = substr(join("-", compact([local.prefix, "blob", local.suffix])), 0, 1024)
-      name_unique = substr(join("-", compact([local.prefix, "blob", local.suffix_unique])), 0, 1024)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "storage_blob", { slug = "blob", suffix = "" }).slug, local.suffix, lookup(local.overrides, "storage_blob", { slug = "blob", suffix = "" }).suffix]), ), 0, 1024)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "storage_blob", { slug = "blob", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "storage_blob", { slug = "blob", suffix = "" }).suffix])), 0, 1024)
       dashes      = true
       slug        = "blob"
       min_length  = 1
@@ -2157,8 +2158,8 @@ locals {
       regex       = "^[^\\s\\/$#&]+$"
     }
     storage_container = {
-      name        = substr(join("-", compact([local.prefix, "stct", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "stct", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "storage_container", { slug = "stct", suffix = "" }).slug, local.suffix, lookup(local.overrides, "storage_container", { slug = "stct", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "storage_container", { slug = "stct", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "storage_container", { slug = "stct", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "stct"
       min_length  = 3
@@ -2167,8 +2168,8 @@ locals {
       regex       = "^[a-z0-9][a-z0-9-]+$"
     }
     storage_data_lake_gen2_filesystem = {
-      name        = substr(join("-", compact([local.prefix, "stdl", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "stdl", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "storage_data_lake_gen2_filesystem", { slug = "stdl", suffix = "" }).slug, local.suffix, lookup(local.overrides, "storage_data_lake_gen2_filesystem", { slug = "stdl", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "storage_data_lake_gen2_filesystem", { slug = "stdl", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "storage_data_lake_gen2_filesystem", { slug = "stdl", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "stdl"
       min_length  = 3
@@ -2177,8 +2178,8 @@ locals {
       regex       = "^[a-z0-9][a-z0-9-]+[a-z0-9]$"
     }
     storage_queue = {
-      name        = substr(join("-", compact([local.prefix, "stq", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "stq", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "storage_queue", { slug = "stq", suffix = "" }).slug, local.suffix, lookup(local.overrides, "storage_queue", { slug = "stq", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "storage_queue", { slug = "stq", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "storage_queue", { slug = "stq", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "stq"
       min_length  = 3
@@ -2187,8 +2188,8 @@ locals {
       regex       = "^[a-z0-9][a-z0-9-]+[a-z0-9]$"
     }
     storage_share = {
-      name        = substr(join("-", compact([local.prefix, "sts", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "sts", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "storage_share", { slug = "sts", suffix = "" }).slug, local.suffix, lookup(local.overrides, "storage_share", { slug = "sts", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "storage_share", { slug = "sts", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "storage_share", { slug = "sts", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "sts"
       min_length  = 3
@@ -2197,8 +2198,8 @@ locals {
       regex       = "^[a-z0-9][a-z0-9-]+[a-z0-9]$"
     }
     storage_share_directory = {
-      name        = substr(join("-", compact([local.prefix, "sts", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "sts", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "storage_share_directory", { slug = "sts", suffix = "" }).slug, local.suffix, lookup(local.overrides, "storage_share_directory", { slug = "sts", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "storage_share_directory", { slug = "sts", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "storage_share_directory", { slug = "sts", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "sts"
       min_length  = 3
@@ -2207,8 +2208,8 @@ locals {
       regex       = "^[a-z0-9][a-z0-9-]+[a-z0-9]$"
     }
     storage_table = {
-      name        = substr(join("-", compact([local.prefix, "stt", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "stt", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "storage_table", { slug = "stt", suffix = "" }).slug, local.suffix, lookup(local.overrides, "storage_table", { slug = "stt", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "storage_table", { slug = "stt", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "storage_table", { slug = "stt", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "stt"
       min_length  = 3
@@ -2217,8 +2218,8 @@ locals {
       regex       = "^[a-z0-9][a-z0-9-]+[a-z0-9]$"
     }
     stream_analytics_function_javascript_udf = {
-      name        = substr(join("-", compact([local.prefix, "asafunc", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "asafunc", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_function_javascript_udf", { slug = "asafunc", suffix = "" }).slug, local.suffix, lookup(local.overrides, "stream_analytics_function_javascript_udf", { slug = "asafunc", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_function_javascript_udf", { slug = "asafunc", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "stream_analytics_function_javascript_udf", { slug = "asafunc", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "asafunc"
       min_length  = 3
@@ -2227,8 +2228,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     stream_analytics_job = {
-      name        = substr(join("-", compact([local.prefix, "asa", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "asa", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_job", { slug = "asa", suffix = "" }).slug, local.suffix, lookup(local.overrides, "stream_analytics_job", { slug = "asa", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_job", { slug = "asa", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "stream_analytics_job", { slug = "asa", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "asa"
       min_length  = 3
@@ -2237,8 +2238,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     stream_analytics_output_blob = {
-      name        = substr(join("-", compact([local.prefix, "asaoblob", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "asaoblob", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_output_blob", { slug = "asaoblob", suffix = "" }).slug, local.suffix, lookup(local.overrides, "stream_analytics_output_blob", { slug = "asaoblob", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_output_blob", { slug = "asaoblob", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "stream_analytics_output_blob", { slug = "asaoblob", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "asaoblob"
       min_length  = 3
@@ -2247,8 +2248,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     stream_analytics_output_eventhub = {
-      name        = substr(join("-", compact([local.prefix, "asaoeh", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "asaoeh", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_output_eventhub", { slug = "asaoeh", suffix = "" }).slug, local.suffix, lookup(local.overrides, "stream_analytics_output_eventhub", { slug = "asaoeh", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_output_eventhub", { slug = "asaoeh", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "stream_analytics_output_eventhub", { slug = "asaoeh", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "asaoeh"
       min_length  = 3
@@ -2257,8 +2258,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     stream_analytics_output_mssql = {
-      name        = substr(join("-", compact([local.prefix, "asaomssql", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "asaomssql", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_output_mssql", { slug = "asaomssql", suffix = "" }).slug, local.suffix, lookup(local.overrides, "stream_analytics_output_mssql", { slug = "asaomssql", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_output_mssql", { slug = "asaomssql", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "stream_analytics_output_mssql", { slug = "asaomssql", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "asaomssql"
       min_length  = 3
@@ -2267,8 +2268,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     stream_analytics_output_servicebus_queue = {
-      name        = substr(join("-", compact([local.prefix, "asaosbq", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "asaosbq", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_output_servicebus_queue", { slug = "asaosbq", suffix = "" }).slug, local.suffix, lookup(local.overrides, "stream_analytics_output_servicebus_queue", { slug = "asaosbq", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_output_servicebus_queue", { slug = "asaosbq", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "stream_analytics_output_servicebus_queue", { slug = "asaosbq", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "asaosbq"
       min_length  = 3
@@ -2277,8 +2278,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     stream_analytics_output_servicebus_topic = {
-      name        = substr(join("-", compact([local.prefix, "asaosbt", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "asaosbt", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_output_servicebus_topic", { slug = "asaosbt", suffix = "" }).slug, local.suffix, lookup(local.overrides, "stream_analytics_output_servicebus_topic", { slug = "asaosbt", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_output_servicebus_topic", { slug = "asaosbt", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "stream_analytics_output_servicebus_topic", { slug = "asaosbt", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "asaosbt"
       min_length  = 3
@@ -2287,8 +2288,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     stream_analytics_reference_input_blob = {
-      name        = substr(join("-", compact([local.prefix, "asarblob", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "asarblob", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_reference_input_blob", { slug = "asarblob", suffix = "" }).slug, local.suffix, lookup(local.overrides, "stream_analytics_reference_input_blob", { slug = "asarblob", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_reference_input_blob", { slug = "asarblob", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "stream_analytics_reference_input_blob", { slug = "asarblob", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "asarblob"
       min_length  = 3
@@ -2297,8 +2298,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     stream_analytics_stream_input_blob = {
-      name        = substr(join("-", compact([local.prefix, "asaiblob", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "asaiblob", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_stream_input_blob", { slug = "asaiblob", suffix = "" }).slug, local.suffix, lookup(local.overrides, "stream_analytics_stream_input_blob", { slug = "asaiblob", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_stream_input_blob", { slug = "asaiblob", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "stream_analytics_stream_input_blob", { slug = "asaiblob", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "asaiblob"
       min_length  = 3
@@ -2307,8 +2308,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     stream_analytics_stream_input_eventhub = {
-      name        = substr(join("-", compact([local.prefix, "asaieh", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "asaieh", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_stream_input_eventhub", { slug = "asaieh", suffix = "" }).slug, local.suffix, lookup(local.overrides, "stream_analytics_stream_input_eventhub", { slug = "asaieh", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_stream_input_eventhub", { slug = "asaieh", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "stream_analytics_stream_input_eventhub", { slug = "asaieh", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "asaieh"
       min_length  = 3
@@ -2317,8 +2318,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     stream_analytics_stream_input_iothub = {
-      name        = substr(join("-", compact([local.prefix, "asaiiot", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "asaiiot", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_stream_input_iothub", { slug = "asaiiot", suffix = "" }).slug, local.suffix, lookup(local.overrides, "stream_analytics_stream_input_iothub", { slug = "asaiiot", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "stream_analytics_stream_input_iothub", { slug = "asaiiot", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "stream_analytics_stream_input_iothub", { slug = "asaiiot", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "asaiiot"
       min_length  = 3
@@ -2327,8 +2328,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     subnet = {
-      name        = substr(join("-", compact([local.prefix, "snet", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "snet", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "subnet", { slug = "snet", suffix = "" }).slug, local.suffix, lookup(local.overrides, "subnet", { slug = "snet", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "subnet", { slug = "snet", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "subnet", { slug = "snet", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "snet"
       min_length  = 1
@@ -2337,8 +2338,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     template_deployment = {
-      name        = substr(join("-", compact([local.prefix, "deploy", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "deploy", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "template_deployment", { slug = "deploy", suffix = "" }).slug, local.suffix, lookup(local.overrides, "template_deployment", { slug = "deploy", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "template_deployment", { slug = "deploy", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "template_deployment", { slug = "deploy", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "deploy"
       min_length  = 1
@@ -2347,8 +2348,8 @@ locals {
       regex       = "^[a-zA-Z0-9-._\\(\\)]+$"
     }
     traffic_manager_profile = {
-      name        = substr(join("-", compact([local.prefix, "traf", local.suffix])), 0, 63)
-      name_unique = substr(join("-", compact([local.prefix, "traf", local.suffix_unique])), 0, 63)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "traffic_manager_profile", { slug = "traf", suffix = "" }).slug, local.suffix, lookup(local.overrides, "traffic_manager_profile", { slug = "traf", suffix = "" }).suffix]), ), 0, 63)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "traffic_manager_profile", { slug = "traf", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "traffic_manager_profile", { slug = "traf", suffix = "" }).suffix])), 0, 63)
       dashes      = true
       slug        = "traf"
       min_length  = 1
@@ -2357,8 +2358,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-.]+[a-zA-Z0-9_]$"
     }
     user_assigned_identity = {
-      name        = substr(join("-", compact([local.prefix, "id", local.suffix])), 0, 128)
-      name_unique = substr(join("-", compact([local.prefix, "id", local.suffix_unique])), 0, 128)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "user_assigned_identity", { slug = "id", suffix = "" }).slug, local.suffix, lookup(local.overrides, "user_assigned_identity", { slug = "id", suffix = "" }).suffix]), ), 0, 128)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "user_assigned_identity", { slug = "id", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "user_assigned_identity", { slug = "id", suffix = "" }).suffix])), 0, 128)
       dashes      = true
       slug        = "id"
       min_length  = 3
@@ -2367,8 +2368,8 @@ locals {
       regex       = "^[a-zA-Z0-9-_]+$"
     }
     virtual_machine = {
-      name        = substr(join("-", compact([local.prefix, "vm", local.suffix])), 0, 15)
-      name_unique = substr(join("-", compact([local.prefix, "vm", local.suffix_unique])), 0, 15)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_machine", { slug = "vm", suffix = "" }).slug, local.suffix, lookup(local.overrides, "virtual_machine", { slug = "vm", suffix = "" }).suffix]), ), 0, 15)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_machine", { slug = "vm", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "virtual_machine", { slug = "vm", suffix = "" }).suffix])), 0, 15)
       dashes      = true
       slug        = "vm"
       min_length  = 1
@@ -2377,8 +2378,8 @@ locals {
       regex       = "^[^\\/\"\\[\\]:|<>+=;,?*@&_][^\\/\"\\[\\]:|<>+=;,?*@&]+[^\\/\"\\[\\]:|<>+=;,?*@&.-]$"
     }
     virtual_machine_extension = {
-      name        = substr(join("-", compact([local.prefix, "vmx", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "vmx", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_machine_extension", { slug = "vmx", suffix = "" }).slug, local.suffix, lookup(local.overrides, "virtual_machine_extension", { slug = "vmx", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_machine_extension", { slug = "vmx", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "virtual_machine_extension", { slug = "vmx", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "vmx"
       min_length  = 1
@@ -2387,8 +2388,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     virtual_machine_scale_set = {
-      name        = substr(join("-", compact([local.prefix, "vmss", local.suffix])), 0, 15)
-      name_unique = substr(join("-", compact([local.prefix, "vmss", local.suffix_unique])), 0, 15)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_machine_scale_set", { slug = "vmss", suffix = "" }).slug, local.suffix, lookup(local.overrides, "virtual_machine_scale_set", { slug = "vmss", suffix = "" }).suffix]), ), 0, 15)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_machine_scale_set", { slug = "vmss", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "virtual_machine_scale_set", { slug = "vmss", suffix = "" }).suffix])), 0, 15)
       dashes      = true
       slug        = "vmss"
       min_length  = 1
@@ -2397,8 +2398,8 @@ locals {
       regex       = "^[^\\/\"\\[\\]:|<>+=;,?*@&_][^\\/\"\\[\\]:|<>+=;,?*@&]+[^\\/\"\\[\\]:|<>+=;,?*@&.-]$"
     }
     virtual_machine_scale_set_extension = {
-      name        = substr(join("-", compact([local.prefix, "vmssx", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "vmssx", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_machine_scale_set_extension", { slug = "vmssx", suffix = "" }).slug, local.suffix, lookup(local.overrides, "virtual_machine_scale_set_extension", { slug = "vmssx", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_machine_scale_set_extension", { slug = "vmssx", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "virtual_machine_scale_set_extension", { slug = "vmssx", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "vmssx"
       min_length  = 1
@@ -2407,8 +2408,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     virtual_network = {
-      name        = substr(join("-", compact([local.prefix, "vnet", local.suffix])), 0, 64)
-      name_unique = substr(join("-", compact([local.prefix, "vnet", local.suffix_unique])), 0, 64)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_network", { slug = "vnet", suffix = "" }).slug, local.suffix, lookup(local.overrides, "virtual_network", { slug = "vnet", suffix = "" }).suffix]), ), 0, 64)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_network", { slug = "vnet", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "virtual_network", { slug = "vnet", suffix = "" }).suffix])), 0, 64)
       dashes      = true
       slug        = "vnet"
       min_length  = 2
@@ -2417,8 +2418,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     virtual_network_gateway = {
-      name        = substr(join("-", compact([local.prefix, "vgw", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "vgw", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_network_gateway", { slug = "vgw", suffix = "" }).slug, local.suffix, lookup(local.overrides, "virtual_network_gateway", { slug = "vgw", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_network_gateway", { slug = "vgw", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "virtual_network_gateway", { slug = "vgw", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "vgw"
       min_length  = 1
@@ -2427,8 +2428,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     virtual_network_gateway_connection = {
-      name        = substr(join("-", compact([local.prefix, "vcn", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "vcn", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_network_gateway_connection", { slug = "vcn", suffix = "" }).slug, local.suffix, lookup(local.overrides, "virtual_network_gateway_connection", { slug = "vcn", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_network_gateway_connection", { slug = "vcn", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "virtual_network_gateway_connection", { slug = "vcn", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "vcn"
       min_length  = 1
@@ -2437,8 +2438,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     virtual_network_peering = {
-      name        = substr(join("-", compact([local.prefix, "vpeer", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "vpeer", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_network_peering", { slug = "vpeer", suffix = "" }).slug, local.suffix, lookup(local.overrides, "virtual_network_peering", { slug = "vpeer", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_network_peering", { slug = "vpeer", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "virtual_network_peering", { slug = "vpeer", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "vpeer"
       min_length  = 1
@@ -2447,8 +2448,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     virtual_wan = {
-      name        = substr(join("-", compact([local.prefix, "vwan", local.suffix])), 0, 80)
-      name_unique = substr(join("-", compact([local.prefix, "vwan", local.suffix_unique])), 0, 80)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_wan", { slug = "vwan", suffix = "" }).slug, local.suffix, lookup(local.overrides, "virtual_wan", { slug = "vwan", suffix = "" }).suffix]), ), 0, 80)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "virtual_wan", { slug = "vwan", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "virtual_wan", { slug = "vwan", suffix = "" }).suffix])), 0, 80)
       dashes      = true
       slug        = "vwan"
       min_length  = 1
@@ -2457,8 +2458,8 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
     }
     windows_virtual_machine = {
-      name        = substr(join("-", compact([local.prefix, "vm", local.suffix])), 0, 15)
-      name_unique = substr(join("-", compact([local.prefix, "vm", local.suffix_unique])), 0, 15)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "windows_virtual_machine", { slug = "vm", suffix = "" }).slug, local.suffix, lookup(local.overrides, "windows_virtual_machine", { slug = "vm", suffix = "" }).suffix]), ), 0, 15)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "windows_virtual_machine", { slug = "vm", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "windows_virtual_machine", { slug = "vm", suffix = "" }).suffix])), 0, 15)
       dashes      = true
       slug        = "vm"
       min_length  = 1
@@ -2467,8 +2468,8 @@ locals {
       regex       = "^[^\\/\"\\[\\]:|<>+=;,?*@&_][^\\/\"\\[\\]:|<>+=;,?*@&]+[^\\/\"\\[\\]:|<>+=;,?*@&.-]$"
     }
     windows_virtual_machine_scale_set = {
-      name        = substr(join("-", compact([local.prefix, "vmss", local.suffix])), 0, 15)
-      name_unique = substr(join("-", compact([local.prefix, "vmss", local.suffix_unique])), 0, 15)
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "windows_virtual_machine_scale_set", { slug = "vmss", suffix = "" }).slug, local.suffix, lookup(local.overrides, "windows_virtual_machine_scale_set", { slug = "vmss", suffix = "" }).suffix]), ), 0, 15)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "windows_virtual_machine_scale_set", { slug = "vmss", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "windows_virtual_machine_scale_set", { slug = "vmss", suffix = "" }).suffix])), 0, 15)
       dashes      = true
       slug        = "vmss"
       min_length  = 1
