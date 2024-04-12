@@ -27,3 +27,11 @@ variable "unique-include-numbers" {
   type        = bool
   default     = true
 }
+
+variable "name-slug-overrides" {
+  type = map(object({
+    slug   = string
+    suffix = optional(string)
+  }))
+  default = {}
+}
