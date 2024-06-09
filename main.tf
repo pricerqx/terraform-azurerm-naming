@@ -1278,14 +1278,14 @@ locals {
       regex       = "^[a-zA-Z0-9][a-zA-Z0-9-_.]+[a-zA-Z0-9]$"
     }
     kusto_cluster = {
-      name = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "kusto_cluster", { slug = "kc", suffix = "" }).slug, local.suffix_safe, lookup(local.overrides, "kusto_cluster", { slug = "kc", suffix = "" }).suffix]), ), 0, 22)
-      name_unique = substr(join("", compact([local.prefix_safe, lookup(local.overrides, "kusto_cluster", { slug = "kc", suffix = "" }).slug, local.suffix_unique_safe, lookup(local.overrides, "kusto_cluster", { slug = "kc", suffix = "" }).suffix])), 0, 22)
-      dashes      = false
+      name = substr(join("-", compact([local.prefix, lookup(local.overrides, "kusto_cluster", { slug = "kc", suffix = "" }).slug, local.suffix, lookup(local.overrides, "kusto_cluster", { slug = "kc", suffix = "" }).suffix]), ), 0, 22)
+      name_unique = substr(join("-", compact([local.prefix, lookup(local.overrides, "kusto_cluster", { slug = "kc", suffix = "" }).slug, local.suffix_unique, lookup(local.overrides, "kusto_cluster", { slug = "kc", suffix = "" }).suffix])), 0, 22)
+      dashes      = true
       slug        = "kc"
       min_length  = 4
       max_length  = 22
       scope       = "global"
-      regex       = "^[a-z][a-z0-9]+$"
+      regex       = "^[a-z][a-zA-Z0-9-_.]+[a-zA-Z0-9]$"
     }
     kusto_database = {
       name = substr(join("-", compact([local.prefix, lookup(local.overrides, "kusto_database", { slug = "kdb", suffix = "" }).slug, local.suffix, lookup(local.overrides, "kusto_database", { slug = "kdb", suffix = "" }).suffix]), ), 0, 260)
