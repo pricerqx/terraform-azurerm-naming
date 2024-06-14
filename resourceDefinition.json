@@ -1171,10 +1171,10 @@
       "min": 4,
       "max": 22
     },
-    "regex": "^(?=.{4,22}$)[a-z][a-z0-9]+$",
+    "regex": "^(?=.{4,22}$)[a-z][a-zA-Z0-9-_.]+[a-zA-Z0-9]$",
     "scope": "global",
     "slug": "kc",
-    "dashes": false
+    "dashes": true
   },
   {
     "name": "kusto_database",
